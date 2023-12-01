@@ -1,0 +1,6 @@
+C:\Users\antek\source\repos\GWO\bin\Debug\GWO.dll
+C:\Users\antek\source\repos\GWO\bin\Debug\GWO.pdb
+C:\Users\antek\source\repos\GWO\obj\Debug\GWO.csproj.AssemblyReference.cache
+C:\Users\antek\source\repos\GWO\obj\Debug\GWO.csproj.CoreCompileInputs.cache
+C:\Users\antek\source\repos\GWO\obj\Debug\GWO.dll
+C:\Users\antek\source\repos\GWO\obj\Debug\GWO.pdb

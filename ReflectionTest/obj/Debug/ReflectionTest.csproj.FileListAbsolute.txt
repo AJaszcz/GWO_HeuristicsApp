@@ -1,0 +1,8 @@
+C:\Users\antek\source\repos\ReflectionTest\bin\Debug\ReflectionTest.exe.config
+C:\Users\antek\source\repos\ReflectionTest\bin\Debug\ReflectionTest.exe
+C:\Users\antek\source\repos\ReflectionTest\bin\Debug\ReflectionTest.pdb
+C:\Users\antek\source\repos\ReflectionTest\obj\Debug\ReflectionTest.csproj.AssemblyReference.cache
+C:\Users\antek\source\repos\ReflectionTest\obj\Debug\ReflectionTest.csproj.SuggestedBindingRedirects.cache
+C:\Users\antek\source\repos\ReflectionTest\obj\Debug\ReflectionTest.csproj.CoreCompileInputs.cache
+C:\Users\antek\source\repos\ReflectionTest\obj\Debug\ReflectionTest.exe
+C:\Users\antek\source\repos\ReflectionTest\obj\Debug\ReflectionTest.pdb
