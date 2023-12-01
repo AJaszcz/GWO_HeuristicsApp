@@ -99,8 +99,9 @@ namespace GWO
     public class GWO : IOptimizationAlgorithm
     {
         string _Name = "GWO";
-
         string IOptimizationAlgorithm.Name { get => _Name; set => _Name = value; }
+
+        // TODO: implementacja
         public ParamInfo[] ParamsInfo { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public IStateWriter writer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public IStateReader reader { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -117,7 +118,7 @@ namespace GWO
 
             // Parametry: func, domain, searchAgents_no, maxIter
             // Nasze paremtry są typu int, od razu możemy je scastować, żeby nie robić tego za każdym razem gdy ich użyjemy
-            // Przy okazji rozpakujemy parametry (mamy tylko 2 w algorytmie, przejrzysciej bedzie jesli je 'rozpakujemy'
+            // Przy okazji rozpakujemy parametry (mamy tylko 2 w algorytmie), przejrzysciej bedzie jesli je 'rozpakujemy'
             int searchAgents_no = (int)parameters[0];
             int maxIter = (int)parameters[1];
 
@@ -136,7 +137,9 @@ namespace GWO
             {
                 for (int j = 0; j < dim; j++)
                 {
-                    Positions[i, j] = rand.NextDouble() * (domain[j,1] - domain[j,0]) + domain[j,0];
+                    // wiersz 0 domain: lower bounds
+                    // wiersz 1 domain: upper bounds
+                    Positions[i, j] = rand.NextDouble() * (domain[1,j] - domain[0,j]) + domain[0,j];
                 }
             }
 
@@ -147,14 +150,15 @@ namespace GWO
             double timerStart = DateTime.Now.Ticks / TimeSpan.TicksPerSecond;
             string startDate = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"); // idk czy potrzebne
 
-            //algorytm:
+            // algorytm:
             for (int l = 0; l < maxIter; l++)
             {
                 for (int i = 0; i < searchAgents_no; i++)
                 {
                     for (int j = 0; j < dim; j++)
                     {
-                        Positions[i, j] = Math.Max(Math.Min(Positions[i, j], domain[j, 0]), domain[j, 0]);
+                        // 'Przycina' pozycje, które wyszły poza Dziedzinę przy kroku
+                        Positions[i, j] = Clamp(Positions[i, j], domain[0, j], domain[1, j]);
                     }
 
                     double fitness = f(SubArray(Positions, i));
@@ -236,6 +240,24 @@ namespace GWO
             }
             return result;
         }
+        public static double Clamp(double value, double min, double max)
+        {
+            if (min > max)
+            {
+                throw new ArgumentException("min > max");
+            }
+ 
+            if (value < min)
+            {
+                return min;
+            }
+            else if (value > max)
+            {
+                return max;
+            }
+ 
+            return value;
+        }
 
 
         public void Hello()
@@ -259,188 +281,3 @@ public static class ArrayExtensions
         return result;
     }
 }
-
-
-
-
-
-//namespace GWO_test
-//{
-//    public class GWO
-//    {
-//        private Random rand;
-
-//        public virtual Solution Optimize(Func<double[], double> objf, double lb, double ub, int dim, int searchAgents_no, int Max_iter)
-//        {
-//            rand = new Random();
-
-//            double[] Alpha_pos = new double[dim];
-//            double Alpha_score = double.PositiveInfinity;
-
-//            double[] Beta_pos = new double[dim];
-//            double Beta_score = double.PositiveInfinity;
-
-//            double[] Delta_pos = new double[dim];
-//            double Delta_score = double.PositiveInfinity;
-
-//            double[] lbArray = new double[dim];
-//            double[] ubArray = new double[dim];
-//            for (int i = 0; i < dim; i++)
-//            {
-//                lbArray[i] = lb;
-//                ubArray[i] = ub;
-//            }
-
-//            double[,] Positions = new double[SearchAgents_no, dim];
-//            for (int i = 0; i < SearchAgents_no; i++)
-//            {
-//                for (int j = 0; j < dim; j++)
-//                {
-//                    Positions[i, j] = rand.NextDouble() * (ubArray[j] - lbArray[j]) + lbArray[j];
-//                }
-//            }
-
-//            double[] Convergence_curve = new double[Max_iter];
-//            Solution s = new Solution();
-
-//            double a;
-//            double timerStart = DateTime.Now.Ticks / TimeSpan.TicksPerSecond;
-//            s.startTime = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-
-//            for (int l = 0; l < Max_iter; l++)
-//            {
-//                for (int i = 0; i < SearchAgents_no; i++)
-//                {
-//                    for (int j = 0; j < dim; j++)
-//                    {
-//                        Positions[i, j] = Math.Max(Math.Min(Positions[i, j], ubArray[j]), lbArray[j]);
-//                    }
-
-//                    double fitness = objf(SubArray(Positions, i));
-//                    s.func_calls++;
-
-//                    if (fitness < Alpha_score)
-//                    {
-//                        Delta_score = Beta_score;
-//                        Delta_pos = (double[])Beta_pos.Clone();
-//                        Beta_score = Alpha_score;
-//                        Beta_pos = (double[])Alpha_pos.Clone();
-//                        Alpha_score = fitness;
-//                        Alpha_pos = (double[])Positions.CloneRow(i);
-//                    }
-
-//                    if (fitness > Alpha_score && fitness < Beta_score)
-//                    {
-//                        Delta_score = Beta_score;
-//                        Delta_pos = (double[])Beta_pos.Clone();
-//                        Beta_score = fitness;
-//                        Beta_pos = (double[])Positions.CloneRow(i);
-//                    }
-
-//                    if (fitness > Alpha_score && fitness > Beta_score && fitness < Delta_score)
-//                    {
-//                        Delta_score = fitness;
-//                        Delta_pos = (double[])Positions.CloneRow(i);
-//                    }
-//                }
-
-//                a = 2 - l * (2.0 / Max_iter);
-
-//                for (int i = 0; i < SearchAgents_no; i++)
-//                {
-//                    for (int j = 0; j < dim; j++)
-//                    {
-//                        double r1 = rand.NextDouble();
-//                        double r2 = rand.NextDouble();
-
-//                        double A1 = 2 * a * r1 - a;
-//                        double C1 = 2 * r2;
-//                        double D_alpha = Math.Abs(C1 * Alpha_pos[j] - Positions[i, j]);
-//                        double X1 = Alpha_pos[j] - A1 * D_alpha;
-
-//                        r1 = rand.NextDouble();
-//                        r2 = rand.NextDouble();
-
-//                        double A2 = 2 * a * r1 - a;
-//                        double C2 = 2 * r2;
-//                        double D_beta = Math.Abs(C2 * Beta_pos[j] - Positions[i, j]);
-//                        double X2 = Beta_pos[j] - A2 * D_beta;
-
-//                        r1 = rand.NextDouble();
-//                        r2 = rand.NextDouble();
-
-//                        double A3 = 2 * a * r1 - a;
-//                        double C3 = 2 * r2;
-//                        double D_delta = Math.Abs(C3 * Delta_pos[j] - Positions[i, j]);
-//                        double X3 = Delta_pos[j] - A3 * D_delta;
-
-//                        Positions[i, j] = (X1 + X2 + X3) / 3;
-//                    }
-//                }
-
-//                Convergence_curve[l] = Alpha_score;
-//            }
-
-//            double timerEnd = DateTime.Now.Ticks / TimeSpan.TicksPerSecond;
-//            s.endTime = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-//            s.executionTime = timerEnd - timerStart;
-//            s.convergence = Convergence_curve;
-//            s.optimizer = "GWO";
-//            s.bestIndividual = Alpha_pos;
-//            s.objfname = objf.Method.Name;
-
-//            s.best = Alpha_score;
-//            s.iterations = Max_iter;
-//            s.popnum = SearchAgents_no;
-//            s.dim = dim;
-//            s.lb = lb;
-//            s.ub = ub;
-
-//            return s;
-//        }
-
-//        private double[] SubArray(double[,] array, int row)
-//        {
-//            int columns = array.GetLength(1);
-//            double[] result = new double[columns];
-//            for (int i = 0; i < columns; i++)
-//            {
-//                result[i] = array[row, i];
-//            }
-//            return result;
-//        }
-//    }
-
-//    public class Solution
-//    {
-//        public double[] bestIndividual;
-//        public double best;
-//        public double[] convergence;
-//        public double executionTime;
-//        public string startTime;
-//        public string endTime;
-//        public string optimizer;
-//        public int iterations;
-//        public int popnum;
-//        public int dim;
-//        public double lb;
-//        public double ub;
-//        public string objfname;
-//        public int func_calls;
-//    }
-
-//    public static class ArrayExtensions
-//    {
-//        public static double[] CloneRow(this double[,] array, int row)
-//        {
-//            int columns = array.GetLength(1);
-//            double[] result = new double[columns];
-//            for (int i = 0; i < columns; i++)
-//            {
-//                result[i] = array[row, i];
-//            }
-//            return result;
-//        }
-//    }
-//}
-
