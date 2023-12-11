@@ -99,6 +99,32 @@ namespace GWO
     public class GWO : IOptimizationAlgorithm
     {
         string _Name = "GWO";
+        // Parametry
+            // Dotyczące iteracji
+            private double[] _XBest;
+            private double _FBest;
+            private int _NumberOfEvaluationFitnessFunction;
+            private int _funcCalls_no;
+            // Dotyczące algorytmu
+            private int _maxIter;
+            private int _searchAgents_no;
+            private double[,] _domain;
+            private int _dim;
+            private int _currentIteration;
+            private Random _rand;
+            // Dotyczące wilków
+            private double[,] _positions;
+
+            private double[] _alphaPos; 
+            private double _alphaScore; 
+
+            private double[] _betaPos; 
+            private double _betaScore; 
+
+            private double[] _deltaPos; 
+            private double _deltaScore;
+        // koniec parametrów
+
         string IOptimizationAlgorithm.Name { get => _Name; set => _Name = value; }
 
         // TODO: implementacja
@@ -107,128 +133,147 @@ namespace GWO
         public IStateReader reader { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public IGenerateTextReport stringReportGenerator { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public IGeneratePDFReport pdfReportGenerator { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double[] XBest { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double FBest { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int NumberOfEvaluationFitnessFunction { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public void Solve(global::fitnessFunction f, double[,] domain, params double[] parameters)
+
+        public double[] XBest { get => _XBest; set => _XBest = value; }
+        public double FBest { get => _FBest; set => _FBest = value; }
+        public int NumberOfEvaluationFitnessFunction { get => _NumberOfEvaluationFitnessFunction; set => _NumberOfEvaluationFitnessFunction = value; }
+
+        public void InitializeWolves(double[,] domain, params double[] parameters)
         {
-            Random rand = new Random();
-            int dim = domain.GetLength(0); // Można zawsze pobierać parametr z dim
+            _domain = domain;
+            _rand = new Random();
+            _dim = _domain.GetLength(0); // Można zawsze pobierać parametr z _dim
 
-            // Parametry: func, domain, searchAgents_no, maxIter
+            // Parametry: func, domain, searchAgents_no, _maxIter
             // Nasze paremtry są typu int, od razu możemy je scastować, żeby nie robić tego za każdym razem gdy ich użyjemy
             // Przy okazji rozpakujemy parametry (mamy tylko 2 w algorytmie), przejrzysciej bedzie jesli je 'rozpakujemy'
-            int searchAgents_no = (int)parameters[0];
-            int maxIter = (int)parameters[1];
+            _searchAgents_no = (int)parameters[0];
+            _maxIter = (int)parameters[1];
 
             // Inicjalizacja populacji
-            double[] alphaPos = new double[dim];
-            double alphaScore = double.PositiveInfinity;
+            _alphaPos = new double[_dim];
+            _alphaScore = double.PositiveInfinity;
 
-            double[] betaPos = new double[dim];
-            double betaScore = double.PositiveInfinity;
+            _betaPos = new double[_dim];
+            _betaScore = double.PositiveInfinity;
 
-            double[] deltaPos = new double[dim];
-            double deltaScore = double.PositiveInfinity;
+            _deltaPos = new double[_dim];
+            _deltaScore = double.PositiveInfinity;
 
-            double[,] Positions = new double[searchAgents_no, dim];
-            for (int i = 0; i < searchAgents_no; i++)
+            _positions = new double[_searchAgents_no, _dim];
+            for (int i = 0; i < _searchAgents_no; i++)
             {
-                for (int j = 0; j < dim; j++)
+                for (int j = 0; j < _dim; j++)
                 {
                     // wiersz 0 domain: lower bounds
                     // wiersz 1 domain: upper bounds
-                    Positions[i, j] = rand.NextDouble() * (domain[1,j] - domain[0,j]) + domain[0,j];
+                    _positions[i, j] = _rand.NextDouble() * (domain[1, j] - domain[0, j]) + domain[0, j];
                 }
             }
+        }
+        public void Solve(global::fitnessFunction f, double[,] domain, params double[] parameters)
+        {
+            InitializeWolves(domain, parameters);
+            _funcCalls_no = 0;
 
-            // Dane do raportu:
-            double[] convCurve = new double[maxIter];
-            double a;
-            int funcCalss_no = 0;
+            // TODO: Można zaimplementować do raportu
+            double[] convCurve = new double[_maxIter];
             double timerStart = DateTime.Now.Ticks / TimeSpan.TicksPerSecond;
             string startDate = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"); // idk czy potrzebne
 
             // algorytm:
-            for (int l = 0; l < maxIter; l++)
+            for (int l = _currentIteration; l < _maxIter; l++)
             {
-                for (int i = 0; i < searchAgents_no; i++)
+                try
                 {
-                    for (int j = 0; j < dim; j++)
-                    {
-                        // 'Przycina' pozycje, które wyszły poza Dziedzinę przy kroku
-                        Positions[i, j] = Clamp(Positions[i, j], domain[0, j], domain[1, j]);
-                    }
-
-                    double fitness = f(SubArray(Positions, i));
-                    funcCalss_no++;
-
-                    if (fitness < alphaScore)
-                    {
-                        deltaScore = betaScore;
-                        deltaPos = (double[])betaPos.Clone();
-                        betaScore = alphaScore;
-                        betaPos = (double[])alphaPos.Clone();
-                        alphaScore = fitness;
-                        alphaPos = (double[])Positions.CloneRow(i);
-                    }
-
-                    if (fitness > alphaScore && fitness < betaScore)
-                    {
-                        deltaScore = betaScore;
-                        deltaPos = (double[])betaPos.Clone();
-                        betaScore = fitness;
-                        betaPos = (double[])Positions.CloneRow(i);
-                    }
-
-                    if (fitness > alphaScore && fitness > betaScore && fitness < deltaScore)
-                    {
-                        deltaScore = fitness;
-                        deltaPos = (double[])Positions.CloneRow(i);
-                    }
+                    RunIteration(f, l);
                 }
-
-                a = 2 - l * (2.0 / maxIter);
-
-                for (int i = 0; i < searchAgents_no; i++)
+                catch (Exception e)
                 {
-                    for (int j = 0; j < dim; j++)
-                    {
-                        double r1 = rand.NextDouble();
-                        double r2 = rand.NextDouble();
-
-                        double A1 = 2 * a * r1 - a;
-                        double C1 = 2 * r2;
-                        double D_alpha = Math.Abs(C1 * alphaPos[j] - Positions[i, j]);
-                        double X1 = alphaPos[j] - A1 * D_alpha;
-
-                        r1 = rand.NextDouble();
-                        r2 = rand.NextDouble();
-
-                        double A2 = 2 * a * r1 - a;
-                        double C2 = 2 * r2;
-                        double D_beta = Math.Abs(C2 * betaPos[j] - Positions[i, j]);
-                        double X2 = betaPos[j] - A2 * D_beta;
-
-                        r1 = rand.NextDouble();
-                        r2 = rand.NextDouble();
-
-                        double A3 = 2 * a * r1 - a;
-                        double C3 = 2 * r2;
-                        double D_delta = Math.Abs(C3 * deltaPos[j] - Positions[i, j]);
-                        double X3 = deltaPos[j] - A3 * D_delta;
-
-                        Positions[i, j] = (X1 + X2 + X3) / 3;
-                    }
+                    System.Console.Error.WriteLine(String.Format("The following error occure while running {0} at iteraton {1} :\n",
+                         _Name, _currentIteration), e.ToString());
+                    break;
                 }
-
-                convCurve[l] = alphaScore;
+                _currentIteration=l;
+                convCurve[l] = _alphaScore;
             }
-            System.Console.WriteLine(alphaScore.ToString());
-            System.Console.WriteLine(alphaPos[0].ToString());
+            System.Console.WriteLine(_alphaScore.ToString());
+            System.Console.WriteLine(_alphaPos[0].ToString());
         }
+        public void RunIteration(global::fitnessFunction f, double l)
+        {
+            double a;
+            for (int i = 0; i < _searchAgents_no; i++)
+            {
+                for (int j = 0; j < _dim; j++)
+                {
+                    // 'Przycina' pozycje, które wyszły poza Dziedzinę przy kroku
+                    _positions[i, j] = Clamp(_positions[i, j], _domain[0, j], _domain[1, j]);
+                }
 
+                double fitness = f(SubArray(_positions, i));
+                _funcCalls_no++;
+
+                if (fitness < _alphaScore)
+                {
+                    _deltaScore = _betaScore;
+                    _deltaPos = (double[])_betaPos.Clone();
+                    _betaScore = _alphaScore;
+                    _betaPos = (double[])_alphaPos.Clone();
+                    _alphaScore = fitness;
+                    _alphaPos = (double[])_positions.CloneRow(i);
+                }
+
+                if (fitness > _alphaScore && fitness < _betaScore)
+                {
+                    _deltaScore = _betaScore;
+                    _deltaPos = (double[])_betaPos.Clone();
+                    _betaScore = fitness;
+                    _betaPos = (double[])_positions.CloneRow(i);
+                }
+
+                if (fitness > _alphaScore && fitness > _betaScore && fitness < _deltaScore)
+                {
+                    _deltaScore = fitness;
+                    _deltaPos = (double[])_positions.CloneRow(i);
+                }
+            }
+
+            a = 2 - l * (2.0 / _maxIter);
+
+            for (int i = 0; i < _searchAgents_no; i++)
+            {
+                for (int j = 0; j < _dim; j++)
+                {
+                    double r1 = _rand.NextDouble();
+                    double r2 = _rand.NextDouble();
+
+                    double A1 = 2 * a * r1 - a;
+                    double C1 = 2 * r2;
+                    double D_alpha = Math.Abs(C1 * _alphaPos[j] - _positions[i, j]);
+                    double X1 = _alphaPos[j] - A1 * D_alpha;
+
+                    r1 = _rand.NextDouble();
+                    r2 = _rand.NextDouble();
+
+                    double A2 = 2 * a * r1 - a;
+                    double C2 = 2 * r2;
+                    double D_beta = Math.Abs(C2 * _betaPos[j] - _positions[i, j]);
+                    double X2 = _betaPos[j] - A2 * D_beta;
+
+                    r1 = _rand.NextDouble();
+                    r2 = _rand.NextDouble();
+
+                    double A3 = 2 * a * r1 - a;
+                    double C3 = 2 * r2;
+                    double D_delta = Math.Abs(C3 * _deltaPos[j] - _positions[i, j]);
+                    double X3 = _deltaPos[j] - A3 * D_delta;
+
+                    _positions[i, j] = (X1 + X2 + X3) / 3;
+                }
+            }
+        }
         // helper methods
         private double[] SubArray(double[,] array, int row)
         {

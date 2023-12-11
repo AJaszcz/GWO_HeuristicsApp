@@ -63,12 +63,12 @@ namespace ReflectionTest
 
 
             MethodInfo[] methods = optAlg.GetMethods(); // Gather GWO class methods
-            Console.WriteLine("\nUsing method: " + methods[16].Name); // wip: turn this into dictionary, instead of array
+            Console.WriteLine("\nUsing method: " + methods[17].Name); // wip: turn this into dictionary, instead of array
             double[,] multiDimensionalArray = { { -100, -100, -100 }, { 100, 100, 100 } }; // 
             double[] parameters = {100, 100};
             object[] allParameters = { fitnessDelegate, multiDimensionalArray, parameters };
 
-            methods[16].Invoke(classInstance,
+            methods[17].Invoke(classInstance,
                 allParameters
             );
 
