@@ -23,23 +23,36 @@ namespace ReflectionTest
             }
             return result;
         }
+        public static double HimmelblauFunction(params double[] args)
+        {
+            if(args.Length > 2)
+            {
+                throw new Exception("args length > 2");
+            }
+            double x = args[0];
+            double y = args[1];
+            return Math.Pow((x * x + y - 11), 2) + Math.Pow((x + y * y - 7), 2);
+        }
         static void Main(string[] args)
         {
             // Specify the path to your DLL
-            string dllPath = "C:\\Users\\antek\\source\\GWO_HeuristicsApp\\GWO\\obj\\Debug\\GWO.dll"; // Full path to dll file
+            string dllPath = "C:\\Users\\antek\\source\\repos\\GWO_HeuristicsApp\\GWO\\obj\\Debug\\GWO.dll"; // Full path to dll file
             // Load the DLL
             Assembly assembly = Assembly.LoadFrom(dllPath);
 
             // Get all types in the assembly
             Type[] types = assembly.GetTypes();
-            Dictionary<string, Type> dict = new Dictionary<string, Type>();
 
-            // Prints all fields and methods for each type extracted
+            // Create dictionary for extraxted Types
+            Dictionary<string, Type> typesDict = new Dictionary<string, Type>();
+
             foreach (Type type in types)
             {
-                dict.Add(type.FullName, type);
-                Console.WriteLine("Type: " + type.FullName);
+                // Adds to dict 
+                typesDict.Add(type.FullName, type);
 
+                // Prints all fields and methods for each type extracted
+                Console.WriteLine("Type: " + type.FullName);
                 FieldInfo[] field_arr = type.GetFields();
                 foreach (FieldInfo field in field_arr)
                 {
@@ -53,27 +66,38 @@ namespace ReflectionTest
                 }
             }
 
-            Type optAlg = dict["GWO.GWO"]; // GWO class Type
-            Type fitFunc = dict["fitnessFunction"]; // Delegeate Type
+            Type optAlg = typesDict["GWO.GWO"]; // GWO class Type
+            Type fitFunc = typesDict["fitnessFunction"]; // Delegeate Type
 
             object classInstance = Activator.CreateInstance(optAlg); // Creates object instance of GWO class
-            MethodInfo fitFuncInfo = typeof(Program).GetMethod("CalculateFitness"); // Gathers method info about 
+            // Choose fit function and create delegate
+            //MethodInfo fitFuncInfo = typeof(Program).GetMethod("CalculateFitness"); // Gathers method info about 
+            MethodInfo fitFuncInfo = typeof(Program).GetMethod("HimmelblauFunction"); // Gathers method info about
             var fitnessDelegate = Delegate.CreateDelegate(fitFunc, null, fitFuncInfo); // Creates instance of a delegate
 
-
-
+            // Gather methods from the algorithm class and put into dictionary
             MethodInfo[] methods = optAlg.GetMethods(); // Gather GWO class methods
-            Console.WriteLine("\nUsing method: " + methods[17].Name); // wip: turn this into dictionary, instead of array
-            double[,] multiDimensionalArray = { { -100, -100, -100 }, { 100, 100, 100 } }; // 
+            Dictionary<string, MethodInfo> optAlgMethodsDict = new Dictionary<string, MethodInfo>();
+            foreach (MethodInfo method in methods)
+            {
+                optAlgMethodsDict.Add(method.Name, method);
+            }
+
+            // Choose solve and invoke
+            MethodInfo currentSovle = optAlgMethodsDict["Solve"];
+            Console.WriteLine("\nUsing method: " + currentSovle.Name);
+
+            // create parameters
+            //double[,] multiDimensionalArray = { { -100, -100, -100 }, { 100, 100, 100 } }; // 
+            double[,] multiDimensionalArray = { { -5, -5 }, { 5, 5 } }; // 
             double[] parameters = {100, 100};
             object[] allParameters = { fitnessDelegate, multiDimensionalArray, parameters };
 
-            methods[17].Invoke(classInstance,
+            currentSovle.Invoke(classInstance,
                 allParameters
             );
 
             Console.Read();
-
         }
     }
 }
