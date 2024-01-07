@@ -36,16 +36,16 @@ namespace ReflectionTest
         static void Main(string[] args)
         {
             // Specify the path to your DLL
-            string dllPath = "C:\\Users\\antek\\source\\repos\\GWO_HeuristicsApp\\GWO\\obj\\Debug\\GWO.dll"; // Full path to dll file
+            ///// TODO: implement defeault path to find dlls in and create logic for loading from many different assemblies //////
+            string dllPath = "C:\\Users\\antek\\source\\GWO_HeuristicsApp\\GWO\\obj\\Debug\\GWO.dll"; // Full path to dll file
             // Load the DLL
             Assembly assembly = Assembly.LoadFrom(dllPath);
 
+            
             // Get all types in the assembly
             Type[] types = assembly.GetTypes();
-
-            // Create dictionary for extraxted Types
+            // Create dictionary for the extracted Types
             Dictionary<string, Type> typesDict = new Dictionary<string, Type>();
-
             foreach (Type type in types)
             {
                 // Adds to dict 
@@ -66,14 +66,21 @@ namespace ReflectionTest
                 }
             }
 
+            // Create instances of specific types (example, to be changed later)
             Type optAlg = typesDict["GWO.GWO"]; // GWO class Type
             Type fitFunc = typesDict["fitnessFunction"]; // Delegeate Type
 
+            // Create delegate with fitness function
             object classInstance = Activator.CreateInstance(optAlg); // Creates object instance of GWO class
+
             // Choose fit function and create delegate
-            //MethodInfo fitFuncInfo = typeof(Program).GetMethod("CalculateFitness"); // Gathers method info about 
+            ////// TODO: implement loading functions from another dll and forwarding them to presenter/controller //////
+
+            // Examples:
+            // MethodInfo fitFuncInfo = typeof(Program).GetMethod("CalculateFitness"); // Gathers method info about 
             MethodInfo fitFuncInfo = typeof(Program).GetMethod("HimmelblauFunction"); // Gathers method info about
-            var fitnessDelegate = Delegate.CreateDelegate(fitFunc, null, fitFuncInfo); // Creates instance of a delegate
+
+            var fitnessDelegate = Delegate.CreateDelegate(fitFunc, null, fitFuncInfo); // Creates instance of a delegate using obtained mathod (fitness fucntion) info
 
             // Gather methods from the algorithm class and put into dictionary
             MethodInfo[] methods = optAlg.GetMethods(); // Gather GWO class methods
@@ -83,16 +90,18 @@ namespace ReflectionTest
                 optAlgMethodsDict.Add(method.Name, method);
             }
 
-            // Choose solve and invoke
+            // Choose 'Solve' method and invoke it
             MethodInfo currentSovle = optAlgMethodsDict["Solve"];
             Console.WriteLine("\nUsing method: " + currentSovle.Name);
 
-            // create parameters
+            ////// TODO: Get parameters from the user (through presenter/controller) //////
+            // Create array of parameters to be sent to Solve
             //double[,] multiDimensionalArray = { { -100, -100, -100 }, { 100, 100, 100 } }; // 
             double[,] multiDimensionalArray = { { -5, -5 }, { 5, 5 } }; // 
             double[] parameters = {100, 100};
             object[] allParameters = { fitnessDelegate, multiDimensionalArray, parameters };
 
+            // Ivoke 'Solve' method
             currentSovle.Invoke(classInstance,
                 allParameters
             );
