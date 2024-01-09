@@ -8,11 +8,13 @@ using System.Reflection.Emit;
 using System.Security.Permissions;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using static ReflectionTest.Program;
 
 namespace ReflectionTest
 {
     internal class Program
     {
+        // Example fitness functions:
         public static double CalculateFitness(params double[] args)
         {
             // Your fitness calculation logic here
@@ -33,66 +35,129 @@ namespace ReflectionTest
             double y = args[1];
             return Math.Pow((x * x + y - 11), 2) + Math.Pow((x + y * y - 7), 2);
         }
+
+        // 
+        public static void GetTypesFromDll(string dllPath, ref Dictionary<string, Type> dict) {
+            Assembly assembly = Assembly.LoadFrom(dllPath);
+            Console.WriteLine("assembly name: " + assembly.GetName());
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (dict.ContainsKey(type.FullName))
+                    continue;
+                // Adds to dict 
+                dict.Add(type.FullName, type);
+
+                //// Prints all fields and methods for each type extracted
+                //Console.WriteLine("Type: " + type.FullName);
+                //FieldInfo[] field_arr = type.GetFields();
+                //foreach (FieldInfo field in field_arr)
+                //{
+                //    Console.WriteLine($"  Field: {field.Name}");
+                //}
+                //// Get all methods in the type
+                //MethodInfo[] methods_arr = type.GetMethods();
+                //foreach (MethodInfo m in methods_arr)
+                //{
+                //    Console.WriteLine("  Method: " + m.Name);
+                //}
+            }
+        }
+        public static void GetFitnessesFromDll(string dllPath, ref Dictionary<string, MethodInfo> dict) {
+            Assembly assembly = Assembly.LoadFrom(dllPath);
+            foreach (Type type in assembly.GetTypes())
+            {
+                foreach (MethodInfo m in type.GetMethods())
+                {
+                    //Console.WriteLine("  Found Fitness: " + m.Name);
+                    dict.Add(m.Name, m);
+                }
+            }
+        }
+        public class OptAlg {
+            public string name;
+            public Type optAlgType;
+            public Type fitFuncType;
+            public object optAlgObj;
+            public Dictionary<string, MethodInfo> optAlgMethods;
+
+        public OptAlg(string dllPath){
+                LoadFromDll(dllPath);
+            }
+            private void LoadFromDll(string dllPath)
+            {
+                Assembly assembly = Assembly.LoadFrom(dllPath);
+                //Console.WriteLine("assembly name: " + assembly.GetName());
+                foreach (Type type in assembly.GetTypes())
+                {
+                    if (type.Name == "fitnessFunction")
+                    {
+                        this.fitFuncType = type;
+                        continue;
+                    }
+                    // Get all methods in the type
+                    MethodInfo[] methods_arr = type.GetMethods();
+                    foreach (MethodInfo m in methods_arr)
+                    {
+                        // Warunek, ze to faktycznie algorytm TODO: To jest okropne, rozwiazac pozniej
+                        if (m.Name == "Solve" && type.GetTypeInfo().ToString()!="IOptimizationAlgorithm")
+                        {
+
+                            // Zakladamy, ze 1 alg na 1 dll
+                            this.optAlgType = type;
+                            this.optAlgObj = Activator.CreateInstance(optAlgType);
+                            this.name = type.Name;
+
+                            this.optAlgMethods = new Dictionary<string, MethodInfo>();
+                            MethodInfo[] methods = optAlgType.GetMethods(); // Gather GWO class methods
+                            foreach (MethodInfo method in methods)
+                            {
+                                optAlgMethods.Add(method.Name, method);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+        //public static Dictionary<string, MethodInfo> DictOfTypesMethods(string typeName)
+        //{
+        //    Type optAlg = typesDict["GWO.GWO"];
+        //    MethodInfo[] methods = optAlg.GetMethods(); // Gather GWO class methods
+        //    Dictionary<string, MethodInfo> optAlgMethodsDict = new Dictionary<string, MethodInfo>();
+        //    foreach (MethodInfo method in methods)
+        //    {
+        //        optAlgMethodsDict.Add(method.Name, method);
+        //    }
+        //    return optAlgMethodsDict;
+        //}
         static void Main(string[] args)
         {
             // Specify the path to your DLL
             ///// TODO: implement defeault path to find dlls in and create logic for loading from many different assemblies //////
-            string dllPath = "C:\\Users\\antek\\source\\GWO_HeuristicsApp\\GWO\\obj\\Debug\\GWO.dll"; // Full path to dll file
-            // Load the DLL
-            Assembly assembly = Assembly.LoadFrom(dllPath);
-
+            string dllPath = "C:\\Users\\antek\\source\\repos\\GWO_HeuristicsApp\\GWO\\obj\\Debug\\GWO.dll"; // Full path to dll file
+            //string dllPath2 = "C:\\Users\\antek\\source\\repos\\GWO_HeuristicsApp\\ReflectionTest\\algorithms\\TestLibrary2.dll"; // Full path to dll file
+            string dllPath2 = "C:\\Users\\antek\\source\\repos\\TestLibrary2\\obj\\Debug\\TestLibrary2.dll";
             
-            // Get all types in the assembly
-            Type[] types = assembly.GetTypes();
-            // Create dictionary for the extracted Types
-            Dictionary<string, Type> typesDict = new Dictionary<string, Type>();
-            foreach (Type type in types)
-            {
-                // Adds to dict 
-                typesDict.Add(type.FullName, type);
+            // Mock list with dll paths
+            string[] dllPathsArr = {dllPath, dllPath2};
 
-                // Prints all fields and methods for each type extracted
-                Console.WriteLine("Type: " + type.FullName);
-                FieldInfo[] field_arr = type.GetFields();
-                foreach (FieldInfo field in field_arr)
-                {
-                    Console.WriteLine($"  Field: {field.Name}");
-                }
-                // Get all methods in the type
-                MethodInfo[] methods_arr = type.GetMethods();
-                foreach (MethodInfo m in methods_arr)
-                {
-                    Console.WriteLine("  Method: " + m.Name);
-                }
+            // Load algorithm objects into dictionary
+            Dictionary<string, OptAlg> algDict = new Dictionary<string, OptAlg>();
+            foreach (string path in dllPathsArr )
+            {
+                OptAlg alg = new OptAlg(path);
+                algDict.Add(alg.name, alg);
             }
 
-            // Create instances of specific types (example, to be changed later)
-            Type optAlg = typesDict["GWO.GWO"]; // GWO class Type
-            Type fitFunc = typesDict["fitnessFunction"]; // Delegeate Type
-
-            // Create delegate with fitness function
-            object classInstance = Activator.CreateInstance(optAlg); // Creates object instance of GWO class
-
-            // Choose fit function and create delegate
-            ////// TODO: implement loading functions from another dll and forwarding them to presenter/controller //////
-
-            // Examples:
-            // MethodInfo fitFuncInfo = typeof(Program).GetMethod("CalculateFitness"); // Gathers method info about 
+            ////// Wybranie funkcji i algorytmu; wywołanie //////
+            
             MethodInfo fitFuncInfo = typeof(Program).GetMethod("HimmelblauFunction"); // Gathers method info about
-
-            var fitnessDelegate = Delegate.CreateDelegate(fitFunc, null, fitFuncInfo); // Creates instance of a delegate using obtained mathod (fitness fucntion) info
-
-            // Gather methods from the algorithm class and put into dictionary
-            MethodInfo[] methods = optAlg.GetMethods(); // Gather GWO class methods
-            Dictionary<string, MethodInfo> optAlgMethodsDict = new Dictionary<string, MethodInfo>();
-            foreach (MethodInfo method in methods)
-            {
-                optAlgMethodsDict.Add(method.Name, method);
-            }
+            var fitnessDelegate = Delegate.CreateDelegate(algDict["GWO"].fitFuncType, null, fitFuncInfo); // Creates instance of a delegate using obtained mathod (fitness fucntion) info
 
             // Choose 'Solve' method and invoke it
-            MethodInfo currentSovle = optAlgMethodsDict["Solve"];
-            Console.WriteLine("\nUsing method: " + currentSovle.Name);
+            MethodInfo currentSovle = algDict["GWO"].optAlgMethods["Solve"];
+            Console.WriteLine("Using method: " + currentSovle.Name);
 
             ////// TODO: Get parameters from the user (through presenter/controller) //////
             // Create array of parameters to be sent to Solve
@@ -101,8 +166,8 @@ namespace ReflectionTest
             double[] parameters = {100, 100};
             object[] allParameters = { fitnessDelegate, multiDimensionalArray, parameters };
 
-            // Ivoke 'Solve' method
-            currentSovle.Invoke(classInstance,
+            // Invoke 'Solve' method
+            currentSovle.Invoke(algDict["GWO"].optAlgObj,
                 allParameters
             );
 
