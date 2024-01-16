@@ -10,6 +10,7 @@ using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
 
 namespace HeuristicApp.Model
 {
@@ -45,7 +46,9 @@ namespace HeuristicApp.Model
         }
         public void AddFitFuncToDict(MethodInfo m)
         {
-            if (!fitFuncDict.ContainsKey(m.Name))
+            // troche na okolo ale dziala
+            string[] standard = { "Equals", "GetHashCode", "GetType", "ToString" };
+            if (!fitFuncDict.ContainsKey(m.Name) && !standard.Contains(m.Name))
             {
                 this.fitFuncDict.Add(m.Name, m);
                 // Notify that fitfunc has just been added
@@ -81,9 +84,21 @@ namespace HeuristicApp.Model
             }
         }
         
-        public void GetAlgInfo(string algName)
+        public object[,] GetAlgInfo(string algName)
         {
-            // TODO: See how it can be done 
+            // To jest taki "mock", jakby (raczej) byly informacje o parametrach przekazywane na widok
+            object[,] parameters = { { "name", "describtion", 1.0, 2.0 }, { "name", "describtion", 1.0, 2.0 } };
+            return parameters;
+            //OptAlg alg = algDict["algName"];
+            //object[] arrayInstance = (object[])Array.CreateInstance(alg.paramInfoType, 2);
+            //arrayInstance = alg.ParamsInfo;
+
+            //int noParam = 2;
+            //for (int i = 0; i < noParam; i++)
+            //{
+            //    arrayInstance[i];
+            //}
+            //// TODO: See how it can be done 
         }
     }
 }

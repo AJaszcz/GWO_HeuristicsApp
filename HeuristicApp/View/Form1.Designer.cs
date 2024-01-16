@@ -1,4 +1,6 @@
-﻿namespace HeuristicApp.View
+﻿using System.Windows.Forms;
+
+namespace HeuristicApp.View
 {
     partial class Form1
     {
@@ -130,15 +132,25 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Location = new System.Drawing.Point(13, 91);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 10;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(277, 395);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(277, 440);
             this.tableLayoutPanel1.TabIndex = 10;
             // 
             // Form1
@@ -183,6 +195,23 @@
         {
             this.fitFuncBox.Items.Add(fitFuncName);
         }
-
+        public void ClearLayoutPanel()
+        {
+            while (tableLayoutPanel1.Controls.Count > 0)
+            {
+                tableLayoutPanel1.Controls[0].Dispose();
+            }
+        }
+        public void AddToLayoutPanel(object[,] arguments)
+        {
+            ClearLayoutPanel();
+            for (int i = 0; i < arguments.GetLength(0); i++)
+            {
+                tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[i,0].ToString() }, 0, i);
+                tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[i, 1].ToString() }, 1, i);
+                tableLayoutPanel1.Controls.Add(new Label() { Text = System.String.Format("{0} - {1}", arguments[i, 2], arguments[i, 3]) }, 2, i);
+                tableLayoutPanel1.Controls.Add(new NumericUpDown(), 3, i);
+            }
+        }
     }
 }

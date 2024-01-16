@@ -18,7 +18,7 @@ namespace HeuristicApp.Model
         public Type fitFuncType;
         public object optAlgObj;
         public Dictionary<string, MethodInfo> optAlgMethods;
-        public Type[] ParamsInfo;
+        public object[] ParamsInfo;
         public Type paramInfoType;
 
         public OptAlg(string dllPath)
@@ -69,7 +69,10 @@ namespace HeuristicApp.Model
         private void LoadParamsInfo()
         {
             MethodInfo m = this.optAlgMethods["get_ParamsInfo"];
-            //this.ParamsInfo = (this.paramInfoType)m.Invoke(this.optAlgObj, null);
+            //Type arr = this.paramInfoType.MakeArrayType();
+            object arrayInstance = Array.CreateInstance(this.paramInfoType, 2);
+            arrayInstance = m.Invoke(this.optAlgObj, null);
+            this.ParamsInfo = (object[])arrayInstance;
         }
     }
 }

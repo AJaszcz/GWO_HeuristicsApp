@@ -47,14 +47,6 @@ public class ParamInfo
     public string Description { get; set; }
     public double UpperBoundary { get; set; }
     public double LowerBoundary { get; set; }
-
-    public ParamInfo(string name, string description, double lowerBoundary, double upperBoundary)
-        {
-            Name = name;
-            Description = description;
-            LowerBoundary = lowerBoundary;
-            UpperBoundary = upperBoundary;
-        }
 }
 public delegate double fitnessFunction(params double[] arg);
 interface IOptimizationAlgorithm

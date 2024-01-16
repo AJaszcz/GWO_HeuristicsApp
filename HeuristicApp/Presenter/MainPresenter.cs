@@ -50,12 +50,12 @@ namespace HeuristicApp.Presenter
         }
         private void _SelectAlgorithm(string algName)
         {
-            this._view.ShowMessage(":C");
+            this._view.AddToLayoutPanel(this._model.GetAlgInfo(algName));
 
         }
         private void _SelectFitFunc(string fitFuncName)
         {
-            this._view.ShowMessage(fitFuncName);
+            this._view.ShowMessage("TODO: wyswietlic paraemtry funkcji");
         }
     }
 }
