@@ -43,10 +43,18 @@ public interface IGenerateTextReport
 }
 public class ParamInfo
 {
-    string Name { get; set; }
-    string Description { get; set; }
-    double UpperBoundary { get; set; }
-    double LowerBoundary { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public double UpperBoundary { get; set; }
+    public double LowerBoundary { get; set; }
+
+    public ParamInfo(string name, string description, double lowerBoundary, double upperBoundary)
+        {
+            Name = name;
+            Description = description;
+            LowerBoundary = lowerBoundary;
+            UpperBoundary = upperBoundary;
+        }
 }
 public delegate double fitnessFunction(params double[] arg);
 interface IOptimizationAlgorithm
@@ -128,8 +136,43 @@ namespace GWO
         string IOptimizationAlgorithm.Name { get => _Name; set => _Name = value; }
 
         // TODO: implementacja
-        public ParamInfo[] ParamsInfo { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IStateWriter writer { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ParamInfo[] ParamsInfo
+        {
+            get
+            {
+                ParamInfo noAgents = new ParamInfo();
+                noAgents.Name = "noAgents";
+                noAgents.Description = "Number of wolves";
+                noAgents.UpperBoundary = 10000.0;
+                noAgents.LowerBoundary = 1.0;
+
+                ParamInfo maxIter = new ParamInfo();
+                noAgents.Name = "maxIter";
+                noAgents.Description = "Number of iterations";
+                noAgents.UpperBoundary = 10000.0;
+                noAgents.LowerBoundary = 1.0;
+
+                return new ParamInfo[] {noAgents, maxIter};
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+        class Writer : IStateWriter
+        {
+            public void SaveToFileStateOfAlghoritm(string str)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public IStateWriter writer { get => new Writer(); set => throw new NotImplementedException(); }
+
+        public IStateWriter SaveToFileStateOfAlghoritm(string str)
+        {
+            throw new NotImplementedException();
+        }
+
         public IStateReader reader { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public IGenerateTextReport stringReportGenerator { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public IGeneratePDFReport pdfReportGenerator { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -274,6 +317,7 @@ namespace GWO
                 }
             }
         }
+
         // helper methods
         private double[] SubArray(double[,] array, int row)
         {
