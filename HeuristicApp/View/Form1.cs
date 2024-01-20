@@ -22,6 +22,8 @@ namespace HeuristicApp.View
 
         public event Action<string> SelectAlgorithm;
         public event Action<string> SelectFitFunc;
+
+        public event Action<string> SaveAlgParams;
         //public Func<string, string[]> AddAlgorithms;
 
         public void ShowMessage(string message) => MessageBox.Show(message);
@@ -57,13 +59,27 @@ namespace HeuristicApp.View
         private void algBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = this.algBox.SelectedItem as string;
-            SelectAlgorithm?.Invoke(name);
+            if (name != null) // zapobiega, ze probuje zapisac/wyswietlic parametry po tym, jak byl wywolany selection clear (wtedy index sie oczywiscie zmienia na null)
+            {
+                SaveAlgParams?.Invoke(name);
+                SelectAlgorithm?.Invoke(name);
+            }
         }
+
+        //private void algBox_LostFocus(object sender, EventArgs e)
+        //{
+        //    //string name = this.fitFuncBox.SelectedItem as string;
+        //    //SaveAlgParams?.Invoke();
+        //}
 
         private void fitFuncBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string name = this.fitFuncBox.SelectedItem as string;
-            SelectFitFunc?.Invoke(name);
+            if (name != null)
+            {
+                SelectFitFunc?.Invoke(name);
+            }
         }
+
     }
 }

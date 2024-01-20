@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\FitFunc.cs" />
     <Compile Include="Model\MainModel.cs" />
     <Compile Include="Model\OptAlg.cs" />
     <Compile Include="Presenter\MainPresenter.cs" />

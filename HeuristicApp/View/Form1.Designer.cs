@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace HeuristicApp.View
 {
@@ -202,16 +203,46 @@ namespace HeuristicApp.View
                 tableLayoutPanel1.Controls[0].Dispose();
             }
         }
-        public void AddToLayoutPanel(object[,] arguments)
+        public void AddToLayoutPanel(object[,] arguments, double[] parameters)
         {
             ClearLayoutPanel();
             for (int i = 0; i < arguments.GetLength(0); i++)
             {
-                tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[i,0].ToString() }, 0, i);
+                tableLayoutPanel1.Controls.Add(new Label() { Name = (string)arguments[i, 0], Text = arguments[i,0].ToString() }, 0, i);
                 tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[i, 1].ToString() }, 1, i);
                 tableLayoutPanel1.Controls.Add(new Label() { Text = System.String.Format("{0} - {1}", arguments[i, 2], arguments[i, 3]) }, 2, i);
-                tableLayoutPanel1.Controls.Add(new NumericUpDown(), 3, i);
+                tableLayoutPanel1.Controls.Add(new NumericUpDown() {Value = (decimal)parameters[i]}, 3, i);
             }
+        }
+        public double[] GetLayoutPanelParameters()
+        {
+            TableLayoutControlCollection controls = tableLayoutPanel1.Controls;
+            List <double> objList = new List <double>();
+            for (int i = 0; i < controls.Count; i++)
+            {
+                if (controls[i] is NumericUpDown)
+                {
+                    NumericUpDown numericUpDown = (NumericUpDown)controls[i];
+                    objList.Add((double)numericUpDown.Value);
+                }
+            }
+            return objList.ToArray();
+        }
+        public void ClearAlgSelect()
+        {
+            this.algBox.ClearSelected();
+        }
+        public void ClearFitFuncSelect()
+        {
+            this.fitFuncBox.ClearSelected();
+        }
+        public string GetSelectedAlgName()
+        {
+            return this.algBox.SelectedItem as string;
+        }
+        public string GetSelectedFitFuncName()
+        {
+            return this.fitFuncBox.SelectedItem as string;
         }
     }
 }

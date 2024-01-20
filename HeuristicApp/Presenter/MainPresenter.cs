@@ -22,27 +22,27 @@ namespace HeuristicApp.Presenter
             _view.AddAlgorithm += _AddAlgorithm;
             _model.AddAlgorithm += _AddAlgorithmToBox;
 
-            _view.AddFitFunc += _GetFitnessesFromDll;
+            _view.AddFitFunc += _AddFitFunc;
             _model.AddFitFunc += _AddFitFuncToBox;
 
             _view.SelectAlgorithm += _SelectAlgorithm;
             _view.SelectFitFunc += _SelectFitFunc;
-            //_AddAlgorithmAction += model.AddAlgToDict;
+
+            _view.SaveAlgParams += _SaveAlgParams;
+            // TODO: SaveFitFuncParams
         }
 
         private void _AddAlgorithm(string path)
         {
             this._model.AddAlgToDict(path);
-            //this._view.ShowMessage(":)");
-            //this._AddAlgorithmToBox(algName);
         }
         private void _AddAlgorithmToBox(string algName)
         {
             this._view.AddAlgorithmToBox(algName);
         }
-        private void _GetFitnessesFromDll(string path)
+        private void _AddFitFunc(string path)
         {
-            this._model.GetFitnessesFromDll(path);
+            this._model.AddFitFuncToDict(path);
         }
         private void _AddFitFuncToBox(string fitFuncName)
         {
@@ -50,12 +50,36 @@ namespace HeuristicApp.Presenter
         }
         private void _SelectAlgorithm(string algName)
         {
-            this._view.AddToLayoutPanel(this._model.GetAlgInfo(algName));
+            // Jesli jest w fitFuncBoxie jest wybrany jakis algorytm
+            string selectedFitFunc = this._view.GetSelectedFitFuncName();
+            if (selectedFitFunc != null)
+                //    _SaveFitFuncParams(selectedFitFunc); TODO: implementacja
 
+            this._view.ClearFitFuncSelect();
+            this._view.ClearLayoutPanel();
+            this._view.AddToLayoutPanel(this._model.GetAlgInfo(algName), this._model.GetAlgParams(algName));
         }
         private void _SelectFitFunc(string fitFuncName)
         {
-            this._view.ShowMessage("TODO: wyswietlic paraemtry funkcji");
+            // Jesli jest w algBoxie jest wybrany jakis algorytm
+            string selectedAlg = this._view.GetSelectedAlgName();
+            if (selectedAlg != null)
+                _SaveAlgParams(selectedAlg);
+
+            this._view.ClearAlgSelect();
+            this._view.ClearLayoutPanel();
+            // TODO: Wyswietlic paraemtry funkcji
+            //this._view.ShowMessage("TODO: wyswietlic paraemtry funkcji");
+        }
+        private void _SaveAlgParams(string algName)
+        {
+            double[] t = this._view.GetLayoutPanelParameters();
+            //this._view.ShowMessage("Lost focus: SAVING NOW");
+            if (t.Length > 0)
+            {
+                this._model.SaveAlgParameters(algName, t);
+            }
+
         }
     }
 }

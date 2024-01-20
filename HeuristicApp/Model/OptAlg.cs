@@ -18,8 +18,13 @@ namespace HeuristicApp.Model
         public Type fitFuncType;
         public object optAlgObj;
         public Dictionary<string, MethodInfo> optAlgMethods;
+
+        // Te obiekty przechowuja INFORMACJE o parametrach
         public object[] ParamsInfo;
         public Type paramInfoType;
+
+        // Te obiekty przechowuja WARTOŚCI parametrów
+        public double[] algParameters;
 
         public OptAlg(string dllPath)
         {
@@ -65,6 +70,11 @@ namespace HeuristicApp.Model
                 }
             }
             LoadParamsInfo();
+
+            // KOLEJNY MOCK - inicjalizacja parametrów na 000
+            //algParameters = new object[2];
+            double[] mockParameters = { 0.0, 0.0 };
+            algParameters = mockParameters;
         }
         private void LoadParamsInfo()
         {
