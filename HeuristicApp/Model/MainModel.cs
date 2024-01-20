@@ -10,30 +10,18 @@ using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Diagnostics;
-using System.Linq;
 
 namespace HeuristicApp.Model
 {
     internal class MainModel
     {
         private Dictionary<string, OptAlg> algDict = new Dictionary<string, OptAlg>();
-        private Dictionary<string, MethodInfo> fitFuncDict = new Dictionary<string, MethodInfo>();
+        private Dictionary<string, FitFunc> fitFuncDict = new Dictionary<string, FitFunc>();
 
         // events
         public event Action <string> AddAlgorithm;
         public event Action <string> AddFitFunc;
 
-        public void GetFitnessesFromDll(string dllPath)
-        {
-            Assembly assembly = Assembly.LoadFrom(dllPath);
-            foreach (Type type in assembly.GetTypes())
-            {
-                foreach (MethodInfo m in type.GetMethods())
-                {
-                    this.AddFitFuncToDict(m);
-                }
-            }
-        }
         public void AddAlgToDict(string dllPath)
         {
             OptAlg alg = new OptAlg(dllPath);
@@ -44,15 +32,15 @@ namespace HeuristicApp.Model
                 AddAlgorithm?.Invoke(alg.name);
             }
         }
-        public void AddFitFuncToDict(MethodInfo m)
+       
+        public void AddFitFuncToDict(string dllPath)
         {
-            // troche na okolo ale dziala
-            string[] standard = { "Equals", "GetHashCode", "GetType", "ToString" };
-            if (!fitFuncDict.ContainsKey(m.Name) && !standard.Contains(m.Name))
+            FitFunc fitFunc = new FitFunc(dllPath);
+            if (!algDict.ContainsKey(fitFunc.name))
             {
-                this.fitFuncDict.Add(m.Name, m);
-                // Notify that fitfunc has just been added
-                AddFitFunc?.Invoke(m.Name);
+                this.fitFuncDict.Add(fitFunc.name, fitFunc);
+                // Notify that algortihm has just been added
+                AddFitFunc?.Invoke(fitFunc.name);
             }
         }
         public void LoadBaseAlgorithms()
@@ -80,8 +68,14 @@ namespace HeuristicApp.Model
             string[] files = Directory.GetFiles(path, filter);
             foreach (string file in files)
             {
-                GetFitnessesFromDll(file);
+                //GetFitnessesFromDll(file);
+                AddFitFuncToDict(file);
             }
+        }
+
+        public void SaveAlgParameters(string name, double[] parameters)
+        {
+            this.algDict[name].algParameters = parameters;
         }
         
         public object[,] GetAlgInfo(string algName)
@@ -100,5 +94,10 @@ namespace HeuristicApp.Model
             //}
             //// TODO: See how it can be done 
         }
+        public double[] GetAlgParams(string algName)
+        {
+            return algDict[algName].algParameters;
+        }
+
     }
 }
