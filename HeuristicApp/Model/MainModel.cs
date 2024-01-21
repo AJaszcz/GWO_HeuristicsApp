@@ -76,7 +76,21 @@ namespace HeuristicApp.Model
         {
             this.algDict[name].algParameters = parameters;
         }
-        
+
+        public void SaveFitFuncParameters(string name, double[] parameters)
+        {
+            //int n = parameters.Length-1;
+            int n = (int)parameters[0];
+            this.fitFuncDict[name].n = n;
+            double [,] domain = new double[n, n];
+            for (int i = 1; i < n; i++)
+            {   
+                domain[0,i-1] = parameters[i]; //lb
+                domain[1,i] = parameters[i]; //ub
+            }
+            this.fitFuncDict[name].domain = domain;
+        }
+
         public object[,] GetAlgInfo(string algName)
         {
             // To jest taki "mock", jakby (raczej) byly informacje o parametrach przekazywane na widok
