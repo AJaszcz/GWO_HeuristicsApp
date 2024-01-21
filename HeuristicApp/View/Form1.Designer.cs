@@ -210,7 +210,7 @@ namespace HeuristicApp.View
         }
         public void AddToLayoutPanel(object[,] arguments, double[] parameters)
         {
-            ClearLayoutPanel();
+            //ClearLayoutPanel();
             for (int i = 0; i < arguments.GetLength(0); i++)
             {
                 tableLayoutPanel1.Controls.Add(new Label() { Name = (string)arguments[i, 0], Text = arguments[i,0].ToString() }, 0, i);
@@ -221,7 +221,7 @@ namespace HeuristicApp.View
         }
         public void AddFitFuncToLayoutPanel(object[] arguments)
         {
-            ClearLayoutPanel();
+            //ClearLayoutPanel();
             tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[0].ToString() }, 0, 0);
             tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[0].ToString() }, 1, 0);
             tableLayoutPanel1.Controls.Add(new Label() { Text = "dims:"}, 2, 0);
@@ -235,15 +235,21 @@ namespace HeuristicApp.View
             tableLayoutPanel1.Controls.Add(new Label() { Text = "ub" }, 2, 1);
 
             this.numericOnLayout.Value = (decimal)(int)arguments[2];
-            //for (int i = 0; i < (int)arguments[2]; i++)
-            //{
-            //    AddDomainToLayoutPanel(i);
-            //}
+
+            double[,] domain = (double[,])arguments[4];
+            if(domain != null)
+                for (int i = 0; i < domain.GetLength(1); i++)
+                {
+                    NumericUpDown lb = (NumericUpDown)tableLayoutPanel1.GetControlFromPosition(1, i + 2);
+                    NumericUpDown ub = (NumericUpDown)tableLayoutPanel1.GetControlFromPosition(2, i + 2);
+                    if(lb != null && ub != null)
+                    {
+                        lb.Value = (decimal)domain[0, i];
+                        ub.Value = (decimal)domain[1, i];
+                    }
+                }
+
         }
-        //public void DimensionalityChanged(int i)
-        //{
-            
-        //}
         public void AddDomainToLayoutPanel(int i)
         {
             tableLayoutPanel1.Controls.Add(new Label() { Text = String.Format("x{0}", i) }, 0, i + 2);

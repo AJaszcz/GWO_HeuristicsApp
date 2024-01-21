@@ -27,8 +27,6 @@ namespace HeuristicApp.Presenter
 
             _view.SelectAlgorithm += _SelectAlgorithm;
             _view.SelectFitFunc += _SelectFitFunc;
-
-            _view.SaveAlgParams += _SaveAlgParams;
             // TODO: SaveFitFuncParams
 
             _view.RunAlgTest += _RunAlgTest;
@@ -59,7 +57,7 @@ namespace HeuristicApp.Presenter
             if (selectedFitFunc != null)
             {
                 // jesli przelaczamy miedzy fitBoxem a algBoxem
-                //    _SaveFitFuncParams(selectedFitFunc); TODO: implementacja
+                _SaveFitFuncParams(selectedFitFunc);
                 this._view.ClearLayoutPanel();
                 this._view.ClearFitFuncSelect();
             }
@@ -85,10 +83,9 @@ namespace HeuristicApp.Presenter
                 this._view.ClearLayoutPanel();
                 this._view.ClearAlgSelect();
             }
-            else
-            {
+            else {
                 // jesli przelaczamy w fitBox
-                //    _SaveFitFuncParams(selectedFitFunc); TODO: implementacja
+                _SaveFitFuncParams(prevSelected);
             }
 
             // refresh layout
@@ -108,9 +105,21 @@ namespace HeuristicApp.Presenter
             }
 
         }
+        private void _SaveFitFuncParams(string fitFuncName)
+        {
+            double[] t = this._view.GetLayoutPanelParameters();
+            //double[] t = this._view.GetLayoutPanelParameters();
+            ////this._view.ShowMessage("Lost focus: SAVING NOW");
+            if (t.Length > 1)
+            {
+                this._model.SaveFitFuncParameters(fitFuncName, t);
+            }
+
+        }
         private void _RunAlgTest(string algName, string[] fitFuncNames)
         {
             this._model.runAlgTest(algName, fitFuncNames);
         }
+
     }
 }

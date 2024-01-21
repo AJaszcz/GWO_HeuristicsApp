@@ -23,9 +23,6 @@ namespace HeuristicApp.View
         public event Action<string> SelectAlgorithm;
         public event Action<string> SelectFitFunc;
 
-        public event Action<string> SaveAlgParams;
-        //public Func<string, string[]> AddAlgorithms;
-
         public event Action<string, string[]> RunAlgTest;
 
         public void ShowMessage(string message) => MessageBox.Show(message);
