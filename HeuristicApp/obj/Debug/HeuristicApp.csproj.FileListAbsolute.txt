@@ -9,3 +9,14 @@ C:\Users\antek\source\GWO_HeuristicsApp\HeuristicApp\obj\Debug\HeuristicApp.cspr
 C:\Users\antek\source\GWO_HeuristicsApp\HeuristicApp\obj\Debug\HeuristicApp.exe
 C:\Users\antek\source\GWO_HeuristicsApp\HeuristicApp\obj\Debug\HeuristicApp.pdb
 C:\Users\antek\source\GWO_HeuristicsApp\HeuristicApp\obj\Debug\HeuristicApp.View.Form1.resources
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\bin\Debug\HeuristicApp.exe.config
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\bin\Debug\HeuristicApp.exe
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\bin\Debug\HeuristicApp.pdb
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\obj\Debug\HeuristicApp.csproj.AssemblyReference.cache
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\obj\Debug\HeuristicApp.csproj.SuggestedBindingRedirects.cache
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\obj\Debug\HeuristicApp.Properties.Resources.resources
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\obj\Debug\HeuristicApp.View.Form1.resources
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\obj\Debug\HeuristicApp.csproj.GenerateResource.cache
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\obj\Debug\HeuristicApp.csproj.CoreCompileInputs.cache
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\obj\Debug\HeuristicApp.exe
+C:\Users\black\Source\Repos\GWO_HeuristicsApp2\HeuristicApp\obj\Debug\HeuristicApp.pdb
