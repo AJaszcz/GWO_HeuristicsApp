@@ -76,31 +76,31 @@ namespace GWO
         {
             var Dane = new
             {
-                XBest = _XBest;
-                FBest = _Fbest;
-                NumberOfEvaluationFitnessFunction = _NumberOfEvaluationFitnessFunction;
-                funcCalls_no = _funcCalls_no;
-                maxIter = _maxIter;
-                searchAgents_no = _searchAgents_no;
-                domain = _domain;
-                dim = _dim;
-                currentIteration = _currentIteration;
-                rand = _rand;
-                positions = _positions;
-                alphaPos = _alphaPos;
-                alphaScore = _alphaScore;
-                betaPos = _betaPos;
-                betaScore = _betaScore;
-                deltaPos = _deltaPos;
-                deltaScore = _deltaScore;
+                XBest = _XBest,
+                FBest = _FBest,
+                NumberOfEvaluationFitnessFunction = _NumberOfEvaluationFitnessFunction,
+                funcCalls_no = _funcCalls_no,
+                maxIter = _maxIter,
+                searchAgents_no = _searchAgents_no,
+                domain = _domain,
+                dim = _dim,
+                currentIteration = _currentIteration,
+                rand = _rand,
+                positions = _positions,
+                alphaPos = _alphaPos,
+                alphaScore = _alphaScore,
+                betaPos = _betaPos,
+                betaScore = _betaScore,
+                deltaPos = _deltaPos,
+                deltaScore = _deltaScore
         };
             string jsonData = JsonConvert.SerializeObject(Dane, new JsonSerializerSettings
             {
-                Formatting = Formatting.Indented,
+                Formatting = Newtonsoft.Json.Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 TypeNameHandling = TypeNameHandling.None
             });
-            File.WriteAllText(path, jsonData);
+            System.IO.File.WriteAllText(path, jsonData);
         }
     }
 }
