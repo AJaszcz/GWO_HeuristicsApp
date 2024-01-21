@@ -26,6 +26,8 @@ namespace HeuristicApp.View
         public event Action<string> SaveAlgParams;
         //public Func<string, string[]> AddAlgorithms;
 
+        public event Action<string, string[]> RunAlgTest;
+
         public void ShowMessage(string message) => MessageBox.Show(message);
 
         private void algAddButton_Click(object sender, EventArgs e)
@@ -61,16 +63,9 @@ namespace HeuristicApp.View
             string name = this.algBox.SelectedItem as string;
             if (name != null) // zapobiega, ze probuje zapisac/wyswietlic parametry po tym, jak byl wywolany selection clear (wtedy index sie oczywiscie zmienia na null)
             {
-                SaveAlgParams?.Invoke(name);
                 SelectAlgorithm?.Invoke(name);
             }
         }
-
-        //private void algBox_LostFocus(object sender, EventArgs e)
-        //{
-        //    //string name = this.fitFuncBox.SelectedItem as string;
-        //    //SaveAlgParams?.Invoke();
-        //}
 
         private void fitFuncBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -81,5 +76,33 @@ namespace HeuristicApp.View
             }
         }
 
+        private void RunAlgTestButton_Click(object sender, EventArgs e)
+        {
+            string algName = this.algBox.CheckedItems[0].ToString();
+            string[] fitFuncNames = this.fitFuncBox.CheckedItems.Cast<string>().ToArray();
+            RunAlgTest?.Invoke(algName, fitFuncNames);
+        }
+
+        private void numericOnLayout_VlaueChanged(object sender, EventArgs e)
+        {
+            NumericUpDown num = (NumericUpDown)sender;
+            int n = (int)num.Value;
+            // To jest najgorsze co chyba tu zrobię... too bad, termin goni
+            int colCount = (tableLayoutPanel1.Controls.Count - 4 - 3)/3;
+            if(n > colCount)
+            {
+                for(int i = colCount; i < n; i++)
+                {
+                    AddDomainToLayoutPanel(i);
+                }
+            }
+            else
+            {
+                for (int i = colCount; i > n; i--)
+                {
+                    RemoveDomainFromLayoutPanel(i);
+                }
+            }
+        }
     }
 }

@@ -74,7 +74,7 @@ namespace HeuristicApp.Model
             // KOLEJNY MOCK - inicjalizacja parametrów na 000
             //algParameters = new object[2];
             double[] mockParameters = { 0.0, 0.0 };
-            algParameters = mockParameters;
+            this.algParameters = mockParameters;
         }
         private void LoadParamsInfo()
         {
