@@ -30,7 +30,11 @@ namespace HeuristicApp.Presenter
 
             _view.SaveAlgParams += _SaveAlgParams;
             // TODO: SaveFitFuncParams
+
+            _view.RunAlgTest += _RunAlgTest;
         }
+        // idk jak to inczaej zrobic - workaround
+        public string prevSelected;
 
         private void _AddAlgorithm(string path)
         {
@@ -50,12 +54,23 @@ namespace HeuristicApp.Presenter
         }
         private void _SelectAlgorithm(string algName)
         {
-            // Jesli jest w fitFuncBoxie jest wybrany jakis algorytm
+            // Jesli jest w fitFuncBoxie jest wybrana jakas funkcja kosztu
             string selectedFitFunc = this._view.GetSelectedFitFuncName();
             if (selectedFitFunc != null)
+            {
+                // jesli przelaczamy miedzy fitBoxem a algBoxem
                 //    _SaveFitFuncParams(selectedFitFunc); TODO: implementacja
+                this._view.ClearLayoutPanel();
+                this._view.ClearFitFuncSelect();
+            }
+            else
+            {
+                // jesli przelaczamy w algBox
+                _SaveAlgParams(prevSelected);
+            }
 
-            this._view.ClearFitFuncSelect();
+            // refresh layout
+            this.prevSelected = algName;
             this._view.ClearLayoutPanel();
             this._view.AddToLayoutPanel(this._model.GetAlgInfo(algName), this._model.GetAlgParams(algName));
         }
@@ -64,12 +79,24 @@ namespace HeuristicApp.Presenter
             // Jesli jest w algBoxie jest wybrany jakis algorytm
             string selectedAlg = this._view.GetSelectedAlgName();
             if (selectedAlg != null)
+            {
+                // jesli przelaczamy miedzy algBoxem a fitBoxem
                 _SaveAlgParams(selectedAlg);
+                this._view.ClearLayoutPanel();
+                this._view.ClearAlgSelect();
+            }
+            else
+            {
+                // jesli przelaczamy w fitBox
+                //    _SaveFitFuncParams(selectedFitFunc); TODO: implementacja
+            }
 
-            this._view.ClearAlgSelect();
+            // refresh layout
+            this.prevSelected = fitFuncName;
             this._view.ClearLayoutPanel();
             // TODO: Wyswietlic paraemtry funkcji
             //this._view.ShowMessage("TODO: wyswietlic paraemtry funkcji");
+            this._view.AddFitFuncToLayoutPanel(this._model.GetFitFuncInfo(fitFuncName));
         }
         private void _SaveAlgParams(string algName)
         {
@@ -80,6 +107,10 @@ namespace HeuristicApp.Presenter
                 this._model.SaveAlgParameters(algName, t);
             }
 
+        }
+        private void _RunAlgTest(string algName, string[] fitFuncNames)
+        {
+            this._model.runAlgTest(algName, fitFuncNames);
         }
     }
 }

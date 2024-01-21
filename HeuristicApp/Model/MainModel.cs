@@ -21,7 +21,6 @@ namespace HeuristicApp.Model
         // events
         public event Action <string> AddAlgorithm;
         public event Action <string> AddFitFunc;
-
         public void AddAlgToDict(string dllPath)
         {
             OptAlg alg = new OptAlg(dllPath);
@@ -99,5 +98,52 @@ namespace HeuristicApp.Model
             return algDict[algName].algParameters;
         }
 
+        public object[] GetFitFuncInfo(string fitFuncName)
+        {
+            FitFunc fitFunc = fitFuncDict[fitFuncName];
+            object[] arr = { fitFunc.name, fitFunc.describtion, fitFunc.n, fitFunc.fixedDimensionality, fitFunc.domain};
+            return arr;
+        }
+
+        public void runAlgTest(string algName, string[] fitFuncNames)
+        {
+            OptAlg alg = algDict[algName];
+            foreach(string fitFuncName in fitFuncNames)
+            {
+                FitFunc curFitFunc = fitFuncDict[fitFuncName];
+                var fitnessDelegate = Delegate.CreateDelegate(alg.fitFuncType, null, curFitFunc.fitFuncMethod);
+
+                double[,] multiDimensionalArray = { { -5, -5}, { 5, 5}};
+                object[] allParameters = { fitnessDelegate, multiDimensionalArray, alg.algParameters};
+
+                alg.optAlgMethods["Solve"].Invoke(alg.optAlgObj, allParameters);
+                double score = (double)alg.optAlgMethods["get_FBest"].Invoke(alg.optAlgObj, null);
+            }
+        }
+        public void runFitFunTest(string[] algNames, string fitFuncName)
+        {
+
+        }
+
+        //MethodInfo fitFuncInfo = typeof(Program).GetMethod("HimmelblauFunction"); // Gathers method info about
+        //var fitnessDelegate = Delegate.CreateDelegate(algDict["GWO"].fitFuncType, null, fitFuncInfo); // Creates instance of a delegate using obtained mathod (fitness fucntion) info
+
+        //// Choose 'Solve' method and invoke it
+        //MethodInfo currentSovle = algDict["GWO"].optAlgMethods["Solve"];
+        //Console.WriteLine("Using method: " + currentSovle.Name);
+
+        //    ////// TODO: Get parameters from the user (through presenter/controller) //////
+        //    // Create array of parameters to be sent to Solve
+        //    //double[,] multiDimensionalArray = { { -100, -100, -100 }, { 100, 100, 100 } }; // 
+        //    double[,] multiDimensionalArray = { { -5, -5 }, { 5, 5 } }; // 
+        //double[] parameters = { 100, 100 };
+        //object[] allParameters = { fitnessDelegate, multiDimensionalArray, parameters };
+
+        //// Invoke 'Solve' method
+        //currentSovle.Invoke(algDict["GWO"].optAlgObj,
+        //        allParameters
+        //    );
+
+        //    Console.Read();
     }
 }
