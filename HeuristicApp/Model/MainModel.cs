@@ -82,11 +82,11 @@ namespace HeuristicApp.Model
             //int n = parameters.Length-1;
             int n = (int)parameters[0];
             this.fitFuncDict[name].n = n;
-            double [,] domain = new double[n, n];
-            for (int i = 1; i < n; i++)
+            double [,] domain = new double[2, n];
+            for (int i = 0; i < n; i++)
             {   
-                domain[0,i-1] = parameters[i]; //lb
-                domain[1,i] = parameters[i]; //ub
+                domain[0,i] = parameters[i*2+1]; //lb
+                domain[1,i] = parameters[i*2+2]; //ub
             }
             this.fitFuncDict[name].domain = domain;
         }
@@ -94,7 +94,7 @@ namespace HeuristicApp.Model
         public object[,] GetAlgInfo(string algName)
         {
             // To jest taki "mock", jakby (raczej) byly informacje o parametrach przekazywane na widok
-            object[,] parameters = { { "name", "describtion", 1.0, 2.0 }, { "name", "describtion", 1.0, 2.0 } };
+            object[,] parameters = { { "noAgents", "Number of Agents", 1.0, 250.0 }, { "maxIter", "Number of iterations", 1.0, 200.0 } };
             return parameters;
             //OptAlg alg = algDict["algName"];
             //object[] arrayInstance = (object[])Array.CreateInstance(alg.paramInfoType, 2);
@@ -127,8 +127,9 @@ namespace HeuristicApp.Model
                 FitFunc curFitFunc = fitFuncDict[fitFuncName];
                 var fitnessDelegate = Delegate.CreateDelegate(alg.fitFuncType, null, curFitFunc.fitFuncMethod);
 
-                double[,] multiDimensionalArray = { { -5, -5}, { 5, 5}};
-                object[] allParameters = { fitnessDelegate, multiDimensionalArray, alg.algParameters};
+                //double[,] multiDimensionalArray = { { -5, -5}, { 5, 5}};
+                double[,] domain = curFitFunc.domain;
+                object[] allParameters = { fitnessDelegate, domain, alg.algParameters};
 
                 alg.optAlgMethods["Solve"].Invoke(alg.optAlgObj, allParameters);
                 double score = (double)alg.optAlgMethods["get_FBest"].Invoke(alg.optAlgObj, null);
