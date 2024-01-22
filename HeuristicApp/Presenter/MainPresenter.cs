@@ -91,9 +91,8 @@ namespace HeuristicApp.Presenter
             // refresh layout
             this.prevSelected = fitFuncName;
             this._view.ClearLayoutPanel();
-            // TODO: Wyswietlic paraemtry funkcji
-            //this._view.ShowMessage("TODO: wyswietlic paraemtry funkcji");
             this._view.AddFitFuncToLayoutPanel(this._model.GetFitFuncInfo(fitFuncName));
+            // stupid hack should be fixed
         }
         private void _SaveAlgParams(string algName)
         {

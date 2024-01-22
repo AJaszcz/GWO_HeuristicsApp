@@ -173,13 +173,16 @@ namespace HeuristicApp.View
             this.Controls.Add(this.runButton);
             this.Controls.Add(this.fitFuncBox);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "HeuristicApp";
             this.ResumeLayout(false);
             this.PerformLayout();
             //
             // numericOnLayout
             //
             this.numericOnLayout.ValueChanged += new System.EventHandler(this.numericOnLayout_VlaueChanged);
+            this.numericOnLayout.Minimum = 0M;
+            this.numericOnLayout.Maximum = 12M;
+
 
         }
 
@@ -216,7 +219,7 @@ namespace HeuristicApp.View
                 tableLayoutPanel1.Controls.Add(new Label() { Name = (string)arguments[i, 0], Text = arguments[i,0].ToString() }, 0, i);
                 tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[i, 1].ToString() }, 1, i);
                 tableLayoutPanel1.Controls.Add(new Label() { Text = System.String.Format("{0} - {1}", arguments[i, 2], arguments[i, 3]) }, 2, i);
-                tableLayoutPanel1.Controls.Add(new NumericUpDown() {Value = (decimal)parameters[i]}, 3, i);
+                tableLayoutPanel1.Controls.Add(new NumericUpDown() {Value = (decimal)parameters[i], Minimum = (decimal)(double)arguments[i, 2], Maximum = (decimal)(double)arguments[i, 3] }, 3, i);
             }
         }
         public void AddFitFuncToLayoutPanel(object[] arguments)
@@ -229,11 +232,14 @@ namespace HeuristicApp.View
 
             tableLayoutPanel1.Controls.Add(this.numericOnLayout, 3, 0);
             this.numericOnLayout.ReadOnly = (bool)arguments[3];
+            this.numericOnLayout.Enabled = !(bool)arguments[3];
 
             tableLayoutPanel1.Controls.Add(new Label() { Text = "params" }, 0, 1);
             tableLayoutPanel1.Controls.Add(new Label() { Text = "lb" }, 1, 1);
             tableLayoutPanel1.Controls.Add(new Label() { Text = "ub" }, 2, 1);
 
+            // stupid af hack
+            this.numericOnLayout.Value = 0.0M;
             this.numericOnLayout.Value = (decimal)(int)arguments[2];
 
             double[,] domain = (double[,])arguments[4];
@@ -253,8 +259,8 @@ namespace HeuristicApp.View
         public void AddDomainToLayoutPanel(int i)
         {
             tableLayoutPanel1.Controls.Add(new Label() { Text = String.Format("x{0}", i) }, 0, i + 2);
-            tableLayoutPanel1.Controls.Add(new NumericUpDown() { Value = 0 }, 1, i + 2);
-            tableLayoutPanel1.Controls.Add(new NumericUpDown() { Value = 0 }, 2, i + 2);
+            tableLayoutPanel1.Controls.Add(new NumericUpDown() { Value = 0, Minimum = -100M, Maximum = 100M, DecimalPlaces = 2}, 1, i + 2);
+            tableLayoutPanel1.Controls.Add(new NumericUpDown() { Value = 0, Minimum = -100M, Maximum = 100M, DecimalPlaces = 2}, 2, i + 2);
         }
         public void RemoveDomainFromLayoutPanel(int i)
         {
