@@ -44,9 +44,31 @@ namespace HeuristicApp.Model
                 if (f.Name == "fixedDimensionality")
                     this.fixedDimensionality = (bool)f.GetValue(fitFuncObj);
                 if (f.Name == "n")
-                    this.n = (int)f.GetValue(fitFuncObj);
+                {
+                    // idk
+                    object n = f.GetValue(fitFuncObj);
+                    if (n == null)
+                    {
+                        this.n = 1;
+                    }
+                    else
+                    {
+                        this.n = (int)n;
+                    }
+
+                }
                 if (f.Name == "domain")
-                    this.domain = (double[,])f.GetValue(fitFuncObj);
+                {
+                    object domain = f.GetValue(fitFuncObj);
+                    if(domain == null)
+                    {
+                        this.domain = new double[2, this.n];
+                    }
+                    else
+                    {
+                        this.domain = (double[,])domain;
+                    }
+                }
 
             }
             foreach (MethodInfo m in type.GetMethods())

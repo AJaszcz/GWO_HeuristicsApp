@@ -139,25 +139,5 @@ namespace HeuristicApp.Model
 
         }
 
-        //MethodInfo fitFuncInfo = typeof(Program).GetMethod("HimmelblauFunction"); // Gathers method info about
-        //var fitnessDelegate = Delegate.CreateDelegate(algDict["GWO"].fitFuncType, null, fitFuncInfo); // Creates instance of a delegate using obtained mathod (fitness fucntion) info
-
-        //// Choose 'Solve' method and invoke it
-        //MethodInfo currentSovle = algDict["GWO"].optAlgMethods["Solve"];
-        //Console.WriteLine("Using method: " + currentSovle.Name);
-
-        //    ////// TODO: Get parameters from the user (through presenter/controller) //////
-        //    // Create array of parameters to be sent to Solve
-        //    //double[,] multiDimensionalArray = { { -100, -100, -100 }, { 100, 100, 100 } }; // 
-        //    double[,] multiDimensionalArray = { { -5, -5 }, { 5, 5 } }; // 
-        //double[] parameters = { 100, 100 };
-        //object[] allParameters = { fitnessDelegate, multiDimensionalArray, parameters };
-
-        //// Invoke 'Solve' method
-        //currentSovle.Invoke(algDict["GWO"].optAlgObj,
-        //        allParameters
-        //    );
-
-        //    Console.Read();
     }
 }
