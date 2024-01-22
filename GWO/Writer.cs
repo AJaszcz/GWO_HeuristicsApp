@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -35,6 +37,13 @@ namespace GWO
 
         private double[] _deltaPos;
         private double _deltaScore;
+        // Dotyczące wykonania
+        private fitnessFunction _func;
+        private double[] _convCurve;
+        private double _timerStart;
+        private string _startDate;
+        private double[] _parameters;
+
         // koniec parametrów
         public StateWriter(double[] XBest,
             double Fbest,
@@ -52,7 +61,12 @@ namespace GWO
             double[] betaPos,
             double betaScore,
             double[] deltaPos,
-            double deltaScore)
+            double deltaScore,
+            fitnessFunction func,
+            double[] convCurve,
+            double timerStart,
+            string startDate,
+            double[] parameters)
         {
             _XBest = XBest;
             _FBest = Fbest;
@@ -71,6 +85,11 @@ namespace GWO
             _betaScore = betaScore;
             _deltaPos = deltaPos;
             _deltaScore = deltaScore;
+            _func = func;
+            _convCurve = convCurve;
+            _timerStart = timerStart;
+            _parameters = parameters;
+            _startDate = startDate;
         }
         public void SaveToFileStateOfAlghoritm(string path)
         {
@@ -92,8 +111,13 @@ namespace GWO
                 betaPos = _betaPos,
                 betaScore = _betaScore,
                 deltaPos = _deltaPos,
-                deltaScore = _deltaScore
-        };
+                deltaScore = _deltaScore,
+                func = _func,
+                convCurve = _convCurve,
+                timerStart = _timerStart,
+                startDate = _startDate,
+                parameters = _parameters
+            };
             string jsonData = JsonConvert.SerializeObject(Dane, new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented,
@@ -101,6 +125,10 @@ namespace GWO
                 TypeNameHandling = TypeNameHandling.None
             });
             System.IO.File.WriteAllText(path, jsonData);
+        }
+        public void DeleteSaveAfterCompletion(string path)
+        {
+            System.IO.File.Delete(path);
         }
     }
 }

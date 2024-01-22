@@ -17,6 +17,7 @@ namespace GWO
     public class GWO : IOptimizationAlgorithm
     {
         string _Name = "GWO";
+        string _savepath = @"C:\temp\save.txt";
         // Parametry
             // Dotyczące iteracji
             private double[] _XBest;
@@ -121,6 +122,35 @@ namespace GWO
             double[] convCurve = new double[_maxIter];
             double timerStart = DateTime.Now.Ticks / TimeSpan.TicksPerSecond;
             string startDate = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"); // idk czy potrzebne
+            if (File.Exists(_savepath))
+            {
+                StateReader SReader = new StateReader();
+                SReader = SReader.LoadFromFileStateOfAlghoritm(_savepath);
+
+                convCurve = SReader.ConvCurve;
+                timerStart = SReader.TimerStart;
+                startDate = SReader.StartDate;
+                f = SReader.Func;
+                parameters = SReader.Parameters;
+                _XBest = SReader.XBest;
+                _FBest = SReader.FBest;
+                _NumberOfEvaluationFitnessFunction = SReader.NumberOfEvaluationFitnessFunction;
+                _funcCalls_no = SReader.FuncCalls_no;
+                _maxIter = SReader.MaxIter;
+                _searchAgents_no = SReader.SearchAgents_no;
+                _domain = SReader.Domain;
+                domain = SReader.Domain;
+                _dim = SReader.Dim;
+                _currentIteration = SReader.CurrentIteration;
+                _rand = SReader.Rand;
+                _positions = SReader.Positions;
+                _alphaPos = SReader.AlphaPos;
+                _alphaScore = SReader.AlphaScore;
+                _betaPos = SReader.BetaPos;
+                _betaScore = SReader.BetaScore;
+                _deltaPos = SReader.DeltaPos;
+                _deltaScore = SReader.DeltaScore;
+            }
 
             // algorytm:
             for (int l = _currentIteration; l < _maxIter; l++)
@@ -135,21 +165,27 @@ namespace GWO
                          _Name, _currentIteration), e.ToString());
                     break;
                 }
-                try
-                {
-                    SaveProcess(f, domain, convCurve, timerStart, startDate, parameters);
-                }
-                catch (Exception e)
-                {
-                    System.Console.Error.WriteLine(String.Format("The following error occure while saving {0} at iteration {1} :\n"),
-                        _Name, _currentIteration, e.ToString());
-                }
+                SaveProcess(f, domain, convCurve, timerStart, startDate, parameters);
+                /*                try
+                                {
+                                    SaveProcess(f, domain, convCurve, timerStart, startDate, parameters);
+                                }
+                                catch (Exception e)
+                                {
+                                    System.Console.Error.WriteLine(String.Format("The following error occure while saving {0} at iteration {1} :\n{2}"), _Name, _currentIteration, e.ToString());
+                                    System.Console.Error.WriteLine("Błąd zapisu");
+                                    throw e;
+                                }*/
 
-                _currentIteration=l;
+                _currentIteration =l;
                 convCurve[l] = _alphaScore;
             }
             System.Console.WriteLine(_alphaScore.ToString());
             System.Console.WriteLine(_alphaPos[0].ToString());
+            if (File.Exists(_savepath))
+            {
+                File.Delete(_savepath);
+            }
         }
         public void RunIteration(global::fitnessFunction f, double l)
         {
@@ -283,11 +319,11 @@ namespace GWO
             Builder.StartDate = startDate;
             Builder.TimerStart = timerStart;
             Builder.Parameters = parameters;
-            Builder.F = f;
+            Builder.Func = f;
 
 
             Writer = Builder.build();
-            Writer.SaveToFileStateOfAlghoritm("/save.json");
+            Writer.SaveToFileStateOfAlghoritm(_savepath);
         }
 
         public void Hello()

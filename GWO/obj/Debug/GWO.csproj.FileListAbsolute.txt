@@ -10,3 +10,13 @@ C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.csproj.AssemblyReferen
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.csproj.CoreCompileInputs.cache
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.dll
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.pdb
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\obj\Debug\GWO.csproj.AssemblyReference.cache
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\obj\Debug\GWO.csproj.CoreCompileInputs.cache
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\obj\Debug\GWO.dll
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\obj\Debug\GWO.pdb
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\bin\Debug\GWO.dll
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\bin\Debug\GWO.pdb
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\bin\Debug\Newtonsoft.Json.dll
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\bin\Debug\Newtonsoft.Json.xml
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\obj\Debug\GWO.csproj.CopyComplete
+C:\Users\black\source\repos\GWO_HeuristicsApp2\GWO\bin\Debug\Json.Net.dll
