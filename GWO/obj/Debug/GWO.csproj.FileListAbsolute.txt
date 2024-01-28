@@ -10,3 +10,6 @@ C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.csproj.AssemblyReferen
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.csproj.CoreCompileInputs.cache
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.dll
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.pdb
+C:\Users\antek\source\GWO_HeuristicsApp\GWO\bin\Debug\Newtonsoft.Json.dll
+C:\Users\antek\source\GWO_HeuristicsApp\GWO\bin\Debug\Newtonsoft.Json.xml
+C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.csproj.CopyComplete

@@ -1,0 +1,6 @@
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Spehere\bin\Debug\Spehere.dll
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Spehere\bin\Debug\Spehere.pdb
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Spehere\obj\Debug\Spehere.csproj.AssemblyReference.cache
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Spehere\obj\Debug\Spehere.csproj.CoreCompileInputs.cache
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Spehere\obj\Debug\Spehere.dll
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Spehere\obj\Debug\Spehere.pdb

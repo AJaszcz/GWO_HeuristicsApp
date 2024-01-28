@@ -26,10 +26,11 @@ namespace HeuristicApp.Model
             Assembly assembly = Assembly.LoadFrom(dllPath);
 
             // powinien byc tylko 1 typ (jesli nie, kolejne zostaja nadpisane)
-            foreach (Type type in assembly.GetTypes())
-            {
-                LoadFitFunc(type);
-            }
+            //foreach (Type type in assembly.GetTypes())
+            //{
+            //    LoadFitFunc(type);
+            //}
+            LoadFitFunc(assembly.GetTypes()[0]); // tylko pierwszy (czyli cala klasa) zostaje wczytana
         }
         public void LoadFitFunc(Type type)
         {
@@ -80,7 +81,7 @@ namespace HeuristicApp.Model
         {
             // troche na okolo ale dziala
             string[] standard = { "Equals", "GetHashCode", "GetType", "ToString" };
-            if (!standard.Contains(m.Name))
+            if (!standard.Contains(m.Name) && m.Name.Contains("Function"))
             {
                 this.fitFuncMethod = m;
             }

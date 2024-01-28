@@ -83,7 +83,7 @@ namespace GWO
         {
             _domain = domain;
             _rand = new Random();
-            _dim = _domain.GetLength(0); // Można zawsze pobierać parametr z _dim
+            _dim = _domain.GetLength(1); // Można zawsze pobierać parametr z _dim
 
             // Parametry: func, domain, searchAgents_no, _maxIter
             // Nasze paremtry są typu int, od razu możemy je scastować, żeby nie robić tego za każdym razem gdy ich użyjemy
@@ -137,7 +137,7 @@ namespace GWO
                 }
                 try
                 {
-                    SaveProcess(f, domain, convCurve, timerStart, startDate, parameters);
+                    //SaveProcess(f, domain, convCurve, timerStart, startDate, parameters);
                 }
                 catch (Exception e)
                 {
@@ -254,41 +254,41 @@ namespace GWO
  
             return value;
         }
-        public void SaveProcess(fitnessFunction f,
-                            double[,] domain,
-                            double[] convCurve,
-                            double timerStart,
-                            string startDate,
-                            params double[] parameters)
-        {
-            StateWriterBuilder Builder = new StateWriterBuilder();
-            Builder.XBest = _XBest;
-            Builder.FBest = _FBest;
-            Builder.NumberOfEvaluationFitnessFunction = _NumberOfEvaluationFitnessFunction;
-            Builder.FuncCalls_no = _funcCalls_no;
-            Builder.MaxIter = _maxIter;
-            Builder.SearchAgents_no = _searchAgents_no;
-            Builder.Domain = domain;
-            Builder.Dim = _dim;
-            Builder.CurrentIteration = _currentIteration;
-            Builder.Rand = _rand;
-            Builder.Positions = _positions;
-            Builder.AlphaPos = _alphaPos;
-            Builder.AlphaScore = _alphaScore;
-            Builder.BetaPos = _betaPos;
-            Builder.BetaScore = _betaScore;
-            Builder.DeltaPos = _deltaPos;
-            Builder.DeltaScore = _deltaScore;
-            Builder.ConvCurve = convCurve;
-            Builder.StartDate = startDate;
-            Builder.TimerStart = timerStart;
-            Builder.Parameters = parameters;
-            Builder.F = f;
+        //public void SaveProcess(fitnessFunction f,
+        //                    double[,] domain,
+        //                    double[] convCurve,
+        //                    double timerStart,
+        //                    string startDate,
+        //                    params double[] parameters)
+        //{
+        //    StateWriterBuilder Builder = new StateWriterBuilder();
+        //    Builder.XBest = _XBest;
+        //    Builder.FBest = _FBest;
+        //    Builder.NumberOfEvaluationFitnessFunction = _NumberOfEvaluationFitnessFunction;
+        //    Builder.FuncCalls_no = _funcCalls_no;
+        //    Builder.MaxIter = _maxIter;
+        //    Builder.SearchAgents_no = _searchAgents_no;
+        //    Builder.Domain = domain;
+        //    Builder.Dim = _dim;
+        //    Builder.CurrentIteration = _currentIteration;
+        //    Builder.Rand = _rand;
+        //    Builder.Positions = _positions;
+        //    Builder.AlphaPos = _alphaPos;
+        //    Builder.AlphaScore = _alphaScore;
+        //    Builder.BetaPos = _betaPos;
+        //    Builder.BetaScore = _betaScore;
+        //    Builder.DeltaPos = _deltaPos;
+        //    Builder.DeltaScore = _deltaScore;
+        //    Builder.ConvCurve = convCurve;
+        //    Builder.StartDate = startDate;
+        //    Builder.TimerStart = timerStart;
+        //    Builder.Parameters = parameters;
+        //    Builder.F = f;
 
 
-            Writer = Builder.build();
-            Writer.SaveToFileStateOfAlghoritm("/save.json");
-        }
+        //    Writer = Builder.build();
+        //    Writer.SaveToFileStateOfAlghoritm("/save.json");
+        //}
 
         public void Hello()
         {

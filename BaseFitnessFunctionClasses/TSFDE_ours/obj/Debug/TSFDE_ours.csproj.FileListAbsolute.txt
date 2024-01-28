@@ -1,0 +1,9 @@
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\obj\Debug\TSFDE_ours.csproj.AssemblyReference.cache
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\obj\Debug\TSFDE_ours.csproj.CoreCompileInputs.cache
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\bin\Debug\TSFDE_ours.dll
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\bin\Debug\TSFDE_ours.pdb
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\bin\Debug\alglib401gpl_net5.dll
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\bin\Debug\MathNet.Numerics.dll
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\obj\Debug\TSFDE_ours.csproj.CopyComplete
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\obj\Debug\TSFDE_ours.dll
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\TSFDE_ours\obj\Debug\TSFDE_ours.pdb
