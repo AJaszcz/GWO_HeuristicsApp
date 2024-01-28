@@ -7,6 +7,7 @@ using System.IO;
 using GWO;
 using GWO.Interfaces;
 using System.Reflection;
+using System.Text.Json;
 
 public delegate double fitnessFunction(params double[] arg);
 
@@ -17,7 +18,7 @@ namespace GWO
     public class GWO : IOptimizationAlgorithm
     {
         string _Name = "GWO";
-        string _savepath = @"C:\temp\save.txt";
+        string _savepath = @"C:/temp/save.json";
         // Parametry
             // Dotyczące iteracji
             private double[] _XBest;
@@ -115,6 +116,7 @@ namespace GWO
         }
         public void Solve(global::fitnessFunction f, double[,] domain, params double[] parameters)
         {
+            File.WriteAllText(@"C:/temp/text.txt", "lol");
             InitializeWolves(domain, parameters);
             _funcCalls_no = 0;
 
@@ -125,31 +127,31 @@ namespace GWO
             if (File.Exists(_savepath))
             {
                 StateReader SReader = new StateReader();
-                SReader = SReader.LoadFromFileStateOfAlghoritm(_savepath);
+                StateSerial state = SReader.LoadFromFileStateOfAlghoritm(_savepath);
 
-                convCurve = SReader.ConvCurve;
-                timerStart = SReader.TimerStart;
-                startDate = SReader.StartDate;
-                f = SReader.Func;
-                parameters = SReader.Parameters;
-                _XBest = SReader.XBest;
-                _FBest = SReader.FBest;
-                _NumberOfEvaluationFitnessFunction = SReader.NumberOfEvaluationFitnessFunction;
-                _funcCalls_no = SReader.FuncCalls_no;
-                _maxIter = SReader.MaxIter;
-                _searchAgents_no = SReader.SearchAgents_no;
-                _domain = SReader.Domain;
-                domain = SReader.Domain;
-                _dim = SReader.Dim;
-                _currentIteration = SReader.CurrentIteration;
-                _rand = SReader.Rand;
-                _positions = SReader.Positions;
-                _alphaPos = SReader.AlphaPos;
-                _alphaScore = SReader.AlphaScore;
-                _betaPos = SReader.BetaPos;
-                _betaScore = SReader.BetaScore;
-                _deltaPos = SReader.DeltaPos;
-                _deltaScore = SReader.DeltaScore;
+                convCurve = state.ConvCurve;
+                timerStart = state.TimerStart;
+                startDate = state.StartDate;
+                f = state.Func;
+                parameters = state.Parameters;
+                _XBest = state.XBest;
+                _FBest = state.FBest;
+                _NumberOfEvaluationFitnessFunction = state.NumberOfEvaluationFitnessFunction;
+                _funcCalls_no = state.FuncCalls_no;
+                _maxIter = state.MaxIter;
+                _searchAgents_no = state.SearchAgents_no;
+                _domain = state.Domain;
+                domain = state.Domain;
+                _dim = state.Dim;
+                _currentIteration = state.CurrentIteration;
+                _rand = state.Rand;
+                _positions = state.Positions;
+                _alphaPos = state.AlphaPos;
+                _alphaScore = state.AlphaScore;
+                _betaPos = state.BetaPos;
+                _betaScore = state.BetaScore;
+                _deltaPos = state.DeltaPos;
+                _deltaScore = state.DeltaScore;
             }
 
             // algorytm:
@@ -297,33 +299,34 @@ namespace GWO
                             string startDate,
                             params double[] parameters)
         {
-            StateWriterBuilder Builder = new StateWriterBuilder();
-            Builder.XBest = _XBest;
-            Builder.FBest = _FBest;
-            Builder.NumberOfEvaluationFitnessFunction = _NumberOfEvaluationFitnessFunction;
-            Builder.FuncCalls_no = _funcCalls_no;
-            Builder.MaxIter = _maxIter;
-            Builder.SearchAgents_no = _searchAgents_no;
-            Builder.Domain = domain;
-            Builder.Dim = _dim;
-            Builder.CurrentIteration = _currentIteration;
-            Builder.Rand = _rand;
-            Builder.Positions = _positions;
-            Builder.AlphaPos = _alphaPos;
-            Builder.AlphaScore = _alphaScore;
-            Builder.BetaPos = _betaPos;
-            Builder.BetaScore = _betaScore;
-            Builder.DeltaPos = _deltaPos;
-            Builder.DeltaScore = _deltaScore;
-            Builder.ConvCurve = convCurve;
-            Builder.StartDate = startDate;
-            Builder.TimerStart = timerStart;
-            Builder.Parameters = parameters;
-            Builder.Func = f;
+            StateSerial state = new StateSerial();
+            state.XBest = _XBest;
+            state.FBest = _FBest;
+            state.NumberOfEvaluationFitnessFunction = _NumberOfEvaluationFitnessFunction;
+            state.FuncCalls_no = _funcCalls_no;
+            state.MaxIter = _maxIter;
+            state.SearchAgents_no = _searchAgents_no;
+            state.Domain = domain;
+            state.Dim = _dim;
+            state.CurrentIteration = _currentIteration;
+            state.Rand = _rand;
+            state.Positions = _positions;
+            state.AlphaPos = _alphaPos;
+            state.AlphaScore = _alphaScore;
+            state.BetaPos = _betaPos;
+            state.BetaScore = _betaScore;
+            state.DeltaPos = _deltaPos;
+            state.DeltaScore = _deltaScore;
+            state.ConvCurve = convCurve;
+            state.StartDate = startDate;
+            state.TimerStart = timerStart;
+            state.Parameters = parameters;
+            state.Func = f;
 
 
-            Writer = Builder.build();
-            Writer.SaveToFileStateOfAlghoritm(_savepath);
+            Writer = new StateWriter(state);
+            string jsonString = System.Text.Json.JsonSerializer.Serialize<StateSerial>(state);
+            /* File.WriteAllText(_savepath, "lol"); */
         }
 
         public void Hello()

@@ -11,6 +11,6 @@ namespace GWO
         // Metoda wczytuj ąca z pliku stan algorytmu (w odpowiednim formacie ).
         // Stan algorytmu : numer iteracji , liczba wywo łań funkcji celu ,
         // populacja wraz z warto ścią funkcji dopasowania
-        StateReader LoadFromFileStateOfAlghoritm(string path);
+        StateSerial LoadFromFileStateOfAlghoritm(string path);
     }
 }

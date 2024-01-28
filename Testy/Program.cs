@@ -1,8 +1,19 @@
 ﻿using GWO;
+using System.Text.Json;
+
 
 GWO.GWO Alg = new GWO.GWO();
 Sphere func = new Sphere();
 double[,] domain = new double[2, 5];
+
+
+
+string fileName = @"C:/temp/sasave.json";
+string jsonString = JsonSerializer.Serialize(Alg);
+File.WriteAllText(fileName, jsonString);
+
+
+
 for (int i = 0; i < 5; i++)
 {
     domain[0, i] = -1000000;
@@ -13,9 +24,9 @@ for (int i = 0; i < 5; i++)
     GWO.GWO alg = new GWO.GWO();
     double[] parameters = new double[] { 50, 5, 70, 0, 1, 0, 1 };
     alg.Solve(Sphere.SphereFunction, domain, parameters);
-    Console.WriteLine(String.Join(" ; ", alg.XBest));
-    Console.WriteLine(alg.FBest);
 }
+
+
 
 public interface IFitnessFunction
 {

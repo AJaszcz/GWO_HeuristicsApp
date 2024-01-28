@@ -9,12 +9,11 @@ C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\bin\Debug\net7.0\Testy.runt
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\bin\Debug\net7.0\Testy.dll
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\bin\Debug\net7.0\Testy.pdb
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\bin\Debug\net7.0\GWO.dll
-C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\bin\Debug\net7.0\Newtonsoft.Json.dll
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\bin\Debug\net7.0\GWO.pdb
-C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\bin\Debug\net7.0\Newtonsoft.Json.xml
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\obj\Debug\net7.0\Testy.csproj.CopyComplete
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\obj\Debug\net7.0\Testy.dll
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\obj\Debug\net7.0\refint\Testy.dll
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\obj\Debug\net7.0\Testy.pdb
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\obj\Debug\net7.0\Testy.genruntimeconfig.cache
 C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\obj\Debug\net7.0\ref\Testy.dll
+C:\Users\black\source\repos\GWO_HeuristicsApp2\Testy\bin\Debug\net7.0\GWO.dll.config

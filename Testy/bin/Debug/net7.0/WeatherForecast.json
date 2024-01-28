@@ -1,0 +1,1 @@
+{"ParamsInfo":[{"Name":"maxIter","Description":"Number of iterations","UpperBoundary":10000,"LowerBoundary":1},{"Name":null,"Description":null,"UpperBoundary":0,"LowerBoundary":0}],"Writer":null,"Reader":null,"StringReportGenerator":null,"PdfReportGenerator":null,"XBest":null,"FBest":0,"NumberOfEvaluationFitnessFunction":0}
