@@ -7,13 +7,18 @@ using System.IO;
 using GWO;
 using GWO.Interfaces;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 
+[Serializable]
 public delegate double fitnessFunction(params double[] arg);
 
 namespace GWO
 {
 
     //public delegate double fitnessFunction(params double[] arg);
+    [Serializable]
     public class GWO : IOptimizationAlgorithm
     {
         string _Name = "GWO";
@@ -75,6 +80,7 @@ namespace GWO
         public IGeneratePDFReport PdfReportGenerator { get; set; }
 
 
+
         public double[] XBest { get => _XBest; set => _XBest = value; }
         public double FBest { get => _FBest; set => _FBest = value; }
         public int NumberOfEvaluationFitnessFunction { get => _NumberOfEvaluationFitnessFunction; set => _NumberOfEvaluationFitnessFunction = value; }
@@ -114,6 +120,9 @@ namespace GWO
         }
         public void Solve(global::fitnessFunction f, double[,] domain, params double[] parameters)
         {
+            string solveName = this._Name + "_" + f.GetMethodInfo().Name + ".dat";
+            string saveDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             InitializeWolves(domain, parameters);
             _funcCalls_no = 0;
 
@@ -121,6 +130,14 @@ namespace GWO
             double[] convCurve = new double[_maxIter];
             double timerStart = DateTime.Now.Ticks / TimeSpan.TicksPerSecond;
             string startDate = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"); // idk czy potrzebne
+
+            // Chech if there already is solution:
+            if (File.Exists(Path.Combine(saveDir, solveName)))
+            {
+                // Read state
+                Console.WriteLine("Read saved state of the algorithm");
+                LoadFromFileStateOfAlghoritm(this, Path.Combine(saveDir, solveName));
+            }
 
             // algorytm:
             for (int l = _currentIteration; l < _maxIter; l++)
@@ -138,18 +155,53 @@ namespace GWO
                 try
                 {
                     //SaveProcess(f, domain, convCurve, timerStart, startDate, parameters);
+                    //Assembly.GetExecutingAssembly().Location
+                    SaveToFileStateOfAlghoritm(
+                        Path.Combine(
+                            saveDir, solveName)
+                        );
                 }
                 catch (Exception e)
                 {
-                    System.Console.Error.WriteLine(String.Format("The following error occure while saving {0} at iteration {1} :\n"),
-                        _Name, _currentIteration, e.ToString());
+                    //System.Console.Error.WriteLine(String.Format("The following error occure while saving {0} at iteration {1} :\n"),
+                    //    _Name, _currentIteration, e.Message);
+                    System.Console.Error.WriteLine(e.Message);
+                    System.Console.Error.WriteLine(e.StackTrace);
                 }
 
                 _currentIteration=l;
                 convCurve[l] = _alphaScore;
             }
-            System.Console.WriteLine(_alphaScore.ToString());
-            System.Console.WriteLine(_alphaPos[0].ToString());
+
+            //System.Console.WriteLine(_alphaScore.ToString());
+            //System.Console.WriteLine(_alphaPos[0].ToString());
+            // print result
+            Console.WriteLine(String.Format("Result for {0}:\n", solveName));
+            Console.WriteLine(this.getStringResult());
+            // delete file if solve complete
+            if (File.Exists(Path.Combine(saveDir, solveName)))
+            {
+                try
+                {
+                    // Delete the file
+                    File.Delete(Path.Combine(saveDir, solveName));
+                    Console.WriteLine("Solve finished. Saved state deleted successfully.");
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine($"Error deleting the file: {e.Message}");
+                }
+            }
+
+        }
+        public string getStringResult()
+        {
+            string result = String.Format("Best fitness: {0}\nArguments:\n", _FBest);
+            for (int i = 0; i < _XBest.Length; i++)
+            {
+                result += String.Format("x{0}: {1}\n", i, _XBest[i]);
+            }
+            return result;
         }
         public void RunIteration(global::fitnessFunction f, double l)
         {
@@ -223,6 +275,8 @@ namespace GWO
                     _positions[i, j] = (X1 + X2 + X3) / 3;
                 }
             }
+            FBest = _alphaScore;
+            XBest = _alphaPos;
         }
 
         // helper methods
@@ -290,10 +344,61 @@ namespace GWO
         //    Writer.SaveToFileStateOfAlghoritm("/save.json");
         //}
 
-        public void Hello()
+        // serialization
+
+        void SaveToFileStateOfAlghoritm(string path)
         {
-            System.Console.WriteLine("Hello World!");
+            SerializeObject(this, path);
+            //SerializeToXml(this, path);
         }
+        static void LoadFromFileStateOfAlghoritm(GWO gwo, string path)
+        {
+            gwo = DeserializeObject<GWO>(path);
+            //gwo = DeserializeFromXml<GWO>(path);
+        }
+        static void SerializeObject<T>(T obj, string filePath)
+        {
+            // Use BinaryFormatter for serialization
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+            {
+                formatter.Serialize(stream, obj);
+            }
+
+            Console.WriteLine($"Object serialized to {filePath}");
+        }
+        //static void SerializeToXml<T>(T obj, string filePath)
+        //{
+        //    var serializer = new XmlSerializer(typeof(T));
+
+        //    using (var writer = new StringWriter())
+        //    {
+        //        serializer.Serialize(writer, obj);
+        //        File.WriteAllText(filePath, writer.ToString());
+        //    }
+        //}
+
+        static T DeserializeObject<T>(string filePath)
+        {
+            // Use BinaryFormatter for deserialization
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            using (FileStream stream = new FileStream(filePath, FileMode.Open))
+            {
+                return (T)formatter.Deserialize(stream);
+            }
+        }
+        //static T DeserializeFromXml<T>(string filePath)
+        //{
+        //    var serializer = new XmlSerializer(typeof(T));
+
+        //    using (var reader = new StringReader(filePath))
+        //    {
+        //        return (T)serializer.Deserialize(reader);
+        //    }
+        //}
+ 
     }
 }
 

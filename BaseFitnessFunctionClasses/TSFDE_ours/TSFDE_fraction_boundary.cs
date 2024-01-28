@@ -542,21 +542,19 @@ namespace TSFDE_ours
             double wart_funkcjonalu;
 
             Lx = 1.0; // Lx;
-            T = 7; // T;
-            N = 7; //N;
-            M = 7; // M;
+            T = 400.0; // T;
+            N = 100; //N;
+            M = 200; // M;
             alfa = 0.6; // alfa;
             beta = 1.5; // beta;
                              //c = c;
                              //ro = ro;
             gamma = 1.0; // gamma;
-            Console.WriteLine("przed\n");
             //war_pocz = warPocz_inv; // war_pocz;
             //war_brzeg_prawy = warPrawyBrzeg_inv; // war_brzeg_prawy;
             //f = f_sourceTerm_inv;  //f;
             //lambda = lambda_inv; //lambda;
 
-            Console.WriteLine("po\n");
 
             // siatka
             deltaX = Lx / N;
@@ -590,7 +588,7 @@ namespace TSFDE_ours
                 ile_pomiarow = M + 1;
                 dokladne = new double[1/*liczbaTermopar*/, ile_pomiarow];
                 odczytane_temperatury = new double[1/*liczbaTermopar*/, ile_pomiarow];
-                punkty_pomiarowe_ind = new int[1] { 7 }; // punktyPomiarowe;
+                punkty_pomiarowe_ind = new int[1] { 100 }; // punktyPomiarowe;
                 wart_funkcjonalu = 0;
 
             double Alfa;
@@ -660,7 +658,6 @@ namespace TSFDE_ours
                                 macierzA[i - 1, j - 1] = gamma * Math.Pow(deltaX, beta - 1.0) + lambda_inv(N * deltaX, (m + 1) * deltaT) * omega(beta - 1.0, 1) + 3 * lambda_inv(N * deltaX, (m + 1) * deltaT) * omega(beta - 1.0, 0);
                             }
                         }
-                    Console.WriteLine(szukaneParametry.Length.ToString());
                     if (m == 0) // przypadek dla pierwszej szukanej chwili czasu wygląda inaczej niż w pozostałych chwilach
                         {
                             if (i <= N - 1)
@@ -688,7 +685,6 @@ namespace TSFDE_ours
                             }
                             else // tylko przypadek i = N
                             {
-                            Console.WriteLine("tuuuuuu");
                             prawa[i - 1] = Math.Pow(deltaX, beta - 1.0) * warunekBrzegowyRobin((m + 1) * deltaT,
                                     szukaneParametry[2], szukaneParametry[3], szukaneParametry[4], szukaneParametry[5], szukaneParametry[6]);
                             }

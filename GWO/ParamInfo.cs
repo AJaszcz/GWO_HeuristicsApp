@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GWO
 {
+    [Serializable]
     public class ParamInfo
     {
         public string Name { get; set; }
