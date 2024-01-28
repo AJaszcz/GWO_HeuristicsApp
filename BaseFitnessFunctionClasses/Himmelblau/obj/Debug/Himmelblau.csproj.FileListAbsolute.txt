@@ -1,0 +1,6 @@
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Himmelblau\bin\Debug\Himmelblau.dll
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Himmelblau\bin\Debug\Himmelblau.pdb
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Himmelblau\obj\Debug\Himmelblau.csproj.AssemblyReference.cache
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Himmelblau\obj\Debug\Himmelblau.csproj.CoreCompileInputs.cache
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Himmelblau\obj\Debug\Himmelblau.dll
+C:\Users\antek\source\GWO_HeuristicsApp\BaseFitnessFunctionClasses\Himmelblau\obj\Debug\Himmelblau.pdb

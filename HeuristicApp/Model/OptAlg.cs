@@ -29,6 +29,9 @@ namespace HeuristicApp.Model
         public OptAlg(string dllPath)
         {
             LoadFromDll(dllPath);
+            double[,] arr = new double[,] { { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 }, { 1, 2, 3 } };
+            int n = arr.GetLength(0);
+            int n2 = arr.GetLength(1);
         }
         private void LoadFromDll(string dllPath)
         {
@@ -51,7 +54,7 @@ namespace HeuristicApp.Model
                 foreach (MethodInfo m in methods_arr)
                 {
                     // Warunek, ze to faktycznie algorytm TODO: To jest okropne, rozwiazac pozniej
-                    if (m.Name == "Solve" && type.GetTypeInfo().ToString() != "IOptimizationAlgorithm")
+                    if (m.Name == "Solve" && type.Name != "IOptimizationAlgorithm")
                     {
 
                         // Zakladamy, ze 1 alg na 1 dll
@@ -73,7 +76,7 @@ namespace HeuristicApp.Model
 
             // KOLEJNY MOCK - inicjalizacja parametrów na 000
             //algParameters = new object[2];
-            double[] mockParameters = { 0.0, 0.0 };
+            double[] mockParameters = { 1.0, 1.0 };
             this.algParameters = mockParameters;
         }
         private void LoadParamsInfo()

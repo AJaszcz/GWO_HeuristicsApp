@@ -180,8 +180,8 @@ namespace HeuristicApp.View
             // numericOnLayout
             //
             this.numericOnLayout.ValueChanged += new System.EventHandler(this.numericOnLayout_VlaueChanged);
-            this.numericOnLayout.Minimum = 0M;
-            this.numericOnLayout.Maximum = 12M;
+            this.numericOnLayout.Minimum = -10000M;
+            this.numericOnLayout.Maximum = 10000M;
 
 
         }
@@ -216,10 +216,18 @@ namespace HeuristicApp.View
             //ClearLayoutPanel();
             for (int i = 0; i < arguments.GetLength(0); i++)
             {
-                tableLayoutPanel1.Controls.Add(new Label() { Name = (string)arguments[i, 0], Text = arguments[i,0].ToString() }, 0, i);
-                tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[i, 1].ToString() }, 1, i);
-                tableLayoutPanel1.Controls.Add(new Label() { Text = System.String.Format("{0} - {1}", arguments[i, 2], arguments[i, 3]) }, 2, i);
-                tableLayoutPanel1.Controls.Add(new NumericUpDown() {Value = (decimal)parameters[i], Minimum = (decimal)(double)arguments[i, 2], Maximum = (decimal)(double)arguments[i, 3] }, 3, i);
+                tableLayoutPanel1.Controls.Add(new Label() { Name = (string)arguments[i, 0], 
+                    Text = arguments[i,0].ToString() },
+                    0, i);
+                tableLayoutPanel1.Controls.Add(new Label() { Text = arguments[i, 1].ToString() },
+                    1, i);
+                tableLayoutPanel1.Controls.Add(new Label() { Text = System.String.Format("{0} - {1}", arguments[i, 2], arguments[i, 3]) },
+                    2, i);
+                tableLayoutPanel1.Controls.Add(new NumericUpDown() {
+                    Minimum = (decimal)(double)arguments[i, 2], 
+                    Maximum = (decimal)(double)arguments[i, 3], 
+                    Value = (decimal)parameters[i] },
+                    3, i);
             }
         }
         public void AddFitFuncToLayoutPanel(object[] arguments)
@@ -248,7 +256,11 @@ namespace HeuristicApp.View
                 {
                     NumericUpDown lb = (NumericUpDown)tableLayoutPanel1.GetControlFromPosition(1, i + 2);
                     NumericUpDown ub = (NumericUpDown)tableLayoutPanel1.GetControlFromPosition(2, i + 2);
-                    if(lb != null && ub != null)
+                    ub.Minimum = -10000M;
+                    lb.Minimum = -10000M;
+                    ub.Maximum = 10000M;
+                    lb.Maximum = 10000M;
+                    if (lb != null && ub != null)
                     {
                         lb.Value = (decimal)domain[0, i];
                         ub.Value = (decimal)domain[1, i];
