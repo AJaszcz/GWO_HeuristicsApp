@@ -13,3 +13,12 @@ C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.pdb
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\bin\Debug\Newtonsoft.Json.dll
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\bin\Debug\Newtonsoft.Json.xml
 C:\Users\antek\source\GWO_HeuristicsApp\GWO\obj\Debug\GWO.csproj.CopyComplete
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\bin\Debug\GWO.dll
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\bin\Debug\GWO.pdb
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\bin\Debug\Newtonsoft.Json.dll
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\bin\Debug\Newtonsoft.Json.xml
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\obj\Debug\GWO.csproj.AssemblyReference.cache
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\obj\Debug\GWO.csproj.CoreCompileInputs.cache
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\obj\Debug\GWO.csproj.CopyComplete
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\obj\Debug\GWO.dll
+C:\Users\black\Source\Repos\GWO_HeuristicsApp_Zielonka\GWO\obj\Debug\GWO.pdb

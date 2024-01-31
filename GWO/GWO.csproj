@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneratePDFReport.cs" />
+    <Compile Include="GenerateTextReport.cs" />
     <Compile Include="StateWriterBuilder.cs" />
     <Compile Include="ParamInfo.cs" />
     <Compile Include="GWO.cs" />

@@ -76,10 +76,8 @@ namespace GWO
         }
         public IStateWriter Writer { get; set; }
         public IStateReader Reader { get; set; }
-        public IGenerateTextReport StringReportGenerator { get; set; }
-        public IGeneratePDFReport PdfReportGenerator { get; set; }
-
-
+        public IGenerateTextReport StringReportGenerator { get; set; } = new GenerateTextReport();
+        public IGeneratePDFReport PdfReportGenerator { get; set; } = new GeneratePDFReport();
 
         public double[] XBest { get => _XBest; set => _XBest = value; }
         public double FBest { get => _FBest; set => _FBest = value; }
@@ -172,6 +170,9 @@ namespace GWO
                 _currentIteration=l;
                 convCurve[l] = _alphaScore;
             }
+            //Generate String
+            StringReportGenerator = new GenerateTextReport(FBest, XBest);
+            PdfReportGenerator = new GeneratePDFReport(StringReportGenerator.ReportString);
 
             //System.Console.WriteLine(_alphaScore.ToString());
             //System.Console.WriteLine(_alphaPos[0].ToString());
@@ -343,6 +344,18 @@ namespace GWO
         //    Writer = Builder.build();
         //    Writer.SaveToFileStateOfAlghoritm("/save.json");
         //}
+
+        public void SetDummyVal()
+        {
+            _FBest = 123;
+            _XBest = new double[6];
+            for(int i = 0; i<6; i++)
+            {
+                _XBest[i] = i;
+            }
+            StringReportGenerator = new GenerateTextReport(_FBest, _XBest);
+            PdfReportGenerator = new GeneratePDFReport(StringReportGenerator.ReportString);
+        }
 
         // serialization
 

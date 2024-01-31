@@ -1,0 +1,16 @@
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\bin\Debug\net5.0\ZadanieAA.exe
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\bin\Debug\net5.0\ZadanieAA.deps.json
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\bin\Debug\net5.0\ZadanieAA.runtimeconfig.json
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\bin\Debug\net5.0\ZadanieAA.runtimeconfig.dev.json
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\bin\Debug\net5.0\ZadanieAA.dll
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\bin\Debug\net5.0\ref\ZadanieAA.dll
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\bin\Debug\net5.0\ZadanieAA.pdb
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ZadanieAA.csproj.AssemblyReference.cache
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ZadanieAA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ZadanieAA.AssemblyInfoInputs.cache
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ZadanieAA.AssemblyInfo.cs
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ZadanieAA.csproj.CoreCompileInputs.cache
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ZadanieAA.dll
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ref\ZadanieAA.dll
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ZadanieAA.pdb
+C:\Users\adam.zielonka\source\repos\ZadanieAA\ZadanieAA\obj\Debug\net5.0\ZadanieAA.genruntimeconfig.cache
